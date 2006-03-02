@@ -18,12 +18,14 @@ $Id$
 
 import os
 
+
 try:
     from setuptools import setup, Extension
+    
 except ImportError, e:
     from distutils.core import setup, Extension
 
-setup(name='zope_i18nmessageid',
+setup(name='zope.i18nmessageid',
       version='3.0',
 
       url='http://svn.zope.org/zope.i18nmessageid',
@@ -32,7 +34,7 @@ setup(name='zope_i18nmessageid',
       author='Zope Corporation and Contributors',
       author_email='zope3-dev@zope.org',
       long_description='',
-      
+
       packages=['zope', 'zope.i18nmessageid'],
       package_dir = {'': 'src'},
 
@@ -43,9 +45,10 @@ setup(name='zope_i18nmessageid',
                    ],
 
       namespace_packages=['zope',],
-      tests_require = ['zope_testing'],
-      install_requires=['zope_deprecation'],
+      tests_require = ['zope.testing'],
+      install_requires=['zope.deprecation'],
       include_package_data = True,
 
       zip_safe = False,
       )
+    
