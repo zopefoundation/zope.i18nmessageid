@@ -36,7 +36,7 @@ setup(name='zope.i18nmessageid',
       long_description='',
 
       packages=['zope', 'zope.i18nmessageid'],
-      package_dir = {'': 'src'},
+      package_dir = {'': os.path.join(os.path.dirname(__file__), 'src')},
 
       ext_modules=[Extension("zope.i18nmessageid._zope_i18nmessageid_message",
                              [os.path.join('src', 'zope', 'i18nmessageid',
