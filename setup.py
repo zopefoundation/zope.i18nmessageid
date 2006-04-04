@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2004 Zope Corporation and Contributors.
+# Copyright (c) 2006 Zope Corporation and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -26,27 +26,19 @@ except ImportError, e:
     from distutils.core import setup, Extension
 
 setup(name='zope.i18nmessageid',
-      version='3.0',
+      version='3.0.0',
 
-      url='http://svn.zope.org/zope.i18nmessageid',
+      url='http://svn.zope.org/zope.i18nmessageid/tags/3.0.0',
       license='ZPL 2.1',
       description='Zope 3 i18n Message Identifier',
       author='Zope Corporation and Contributors',
       author_email='zope3-dev@zope.org',
-      long_description='',
 
       packages=['zope', 'zope.i18nmessageid'],
       package_dir = {'': os.path.join(os.path.dirname(__file__), 'src')},
 
-      ext_modules=[Extension("zope.i18nmessageid._zope_i18nmessageid_message",
-                             [os.path.join('src', 'zope', 'i18nmessageid',
-                                           "_zope_i18nmessageid_message.c")
-                              ]),
-                   ],
-
       namespace_packages=['zope',],
       tests_require = ['zope.testing'],
-      install_requires=['zope.deprecation'],
       include_package_data = True,
 
       zip_safe = False,
