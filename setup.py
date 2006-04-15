@@ -26,7 +26,7 @@ except ImportError, e:
     from distutils.core import setup, Extension
 
 setup(name='zope.i18nmessageid',
-      version='3.2.0',
+      version='3.2.0.1',
 
       url='http://svn.zope.org/zope.i18nmessageid',
       license='ZPL 2.1',
