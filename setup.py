@@ -18,15 +18,10 @@ $Id$
 
 import os
 
-
-try:
-    from setuptools import setup, Extension
-    
-except ImportError, e:
-    from distutils.core import setup, Extension
+from setuptools import setup, find_packages, Extension
 
 setup(name='zope.i18nmessageid',
-      version='3.0',
+      version='3.4dev',
 
       url='http://svn.zope.org/zope.i18nmessageid',
       license='ZPL 2.1',
@@ -35,7 +30,7 @@ setup(name='zope.i18nmessageid',
       author_email='zope3-dev@zope.org',
       long_description='',
 
-      packages=['zope', 'zope.i18nmessageid'],
+      packages=find_packages('src'),
       package_dir = {'': 'src'},
 
       ext_modules=[Extension("zope.i18nmessageid._zope_i18nmessageid_message",
