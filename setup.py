@@ -41,7 +41,8 @@ setup(name='zope.i18nmessageid',
 
       namespace_packages=['zope',],
       tests_require = ['zope.testing'],
-      install_requires=['zope.deprecation'],
+      install_requires=['setuptools',
+                        'zope.deprecation'],
       include_package_data = True,
 
       zip_safe = False,
