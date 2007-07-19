@@ -21,7 +21,7 @@ import os
 from setuptools import setup, find_packages, Extension
 
 setup(name='zope.i18nmessageid',
-      version = '3.4.0',
+      version = '3.4.1',
 
       url='http://svn.zope.org/zope.i18nmessageid',
       license='ZPL 2.1',
