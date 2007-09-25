@@ -1,6 +1,12 @@
 zope.i18nmessageid Package Changelog
 ====================================
 
+Version 3.4.2 (2007/9/25)
+-------------------------
+
+- move ZopeMessageFactory from zope.app.i18n to this package 
+
+
 zope.i18nmessageid version 3.4.0 (2007/07/19)
 ---------------------------------------------
 

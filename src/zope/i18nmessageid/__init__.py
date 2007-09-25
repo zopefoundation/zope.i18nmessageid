@@ -16,3 +16,6 @@
 $Id$
 """
 from zope.i18nmessageid.message import Message, MessageFactory
+
+# import this as _ to create i18n messages in the zope domain
+ZopeMessageFactory = MessageFactory('zope')

@@ -24,6 +24,15 @@ translation.  They are created by a message factory. The message
 factory is created by calling ``MessageFactory`` with the source
 domain.
 
+ZopeMessageFactory
+------------------
+
+  >>> from zope.i18nmessageid import ZopeMessageFactory as _z_
+  >>> foo = _z_('foo')
+  >>> foo.domain
+  'zope'
+  
+
 
 Example
 -------

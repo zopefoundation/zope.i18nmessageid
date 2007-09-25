@@ -20,30 +20,44 @@ import os
 
 from setuptools import setup, find_packages, Extension
 
+def read(*rnames):
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+
+
 setup(name='zope.i18nmessageid',
-      version = '3.4.1',
+    version = '3.4.2',
+    author='Zope Corporation and Contributors',
+    author_email='zope3-dev@zope.org',
+    description='Zope 3 i18n Message Identifier',
+    long_description=(
+        read('README.txt')
+        + '\n\n' +
+        read('CHANGES.txt')
+        ),
+    keywords = "zope3 i18n message factory",
+    classifiers = [
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Web Environment',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: Zope Public License',
+        'Programming Language :: Python',
+        'Natural Language :: English',
+        'Operating System :: OS Independent',
+        'Topic :: Internet :: WWW/HTTP',
+        'Framework :: Zope3'],
+    license='ZPL 2.1',
+    url='http://svn.zope.org/zope.i18nmessageid',
+    packages=find_packages('src'),
+    package_dir = {'': 'src'},
 
-      url='http://svn.zope.org/zope.i18nmessageid',
-      license='ZPL 2.1',
-      description='Zope 3 i18n Message Identifier',
-      author='Zope Corporation and Contributors',
-      author_email='zope3-dev@zope.org',
-      long_description='',
-
-      packages=find_packages('src'),
-      package_dir = {'': 'src'},
-
-      ext_modules=[Extension("zope.i18nmessageid._zope_i18nmessageid_message",
-                             [os.path.join('src', 'zope', 'i18nmessageid',
-                                           "_zope_i18nmessageid_message.c")
-                              ]),
-                   ],
-
-      namespace_packages=['zope',],
-      tests_require = ['zope.testing'],
-      install_requires=['setuptools'],
-      include_package_data = True,
-
-      zip_safe = False,
-      )
-    
+    ext_modules=[Extension("zope.i18nmessageid._zope_i18nmessageid_message",
+                           [os.path.join('src', 'zope', 'i18nmessageid',
+                                         "_zope_i18nmessageid_message.c")
+                            ]),
+                 ],
+    namespace_packages=['zope',],
+    tests_require = ['zope.testing'],
+    install_requires=['setuptools'],
+    include_package_data = True,
+    zip_safe = False,
+    )
