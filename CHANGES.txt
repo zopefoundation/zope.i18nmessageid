@@ -1,35 +1,40 @@
 zope.i18nmessageid Package Changelog
 ====================================
 
+Version 3.4.3 (2007/9/26)
+-------------------------
+
+- Make PyPI the home URL.
+
 Version 3.4.2 (2007/9/25)
 -------------------------
 
-- move ZopeMessageFactory from zope.app.i18n to this package 
+- Moved the ``ZopeMessageFactory`` from ``zope.app.i18n`` to this package.
 
 
-zope.i18nmessageid version 3.4.0 (2007/07/19)
----------------------------------------------
+Version 3.4.0 (2007/07/19)
+--------------------------
 
 - Remove incorrect dependency.
 
 - Create final release to reflect package status.
 
 
-zope.i18nmessageid version 3.2.0 (2006/01/05)
----------------------------------------------
+Version 3.2.0 (2006/01/05)
+--------------------------
 
-Corresponds to the verison of the zope.i18nmessageid package shipped as
-part of the Zope 3.2.0 release.
+- Corresponds to the verison of the zope.i18nmessageid package shipped as
+  part of the Zope 3.2.0 release.
 
-Implemented 'zope.i18nmessageid.message' as a C extension.
+- Implemented 'zope.i18nmessageid.message' as a C extension.
 
-Deprecated 'zope.i18nmessageid.messageid' APIs ('MessageID',
-'MessageIDFactory') in favor of replacements in 'zope.i18nmessageid.message'
-('Message', 'MessageFactory').  Deprecated items are scheduled for removal
-in Zope 3.3.
+- Deprecated 'zope.i18nmessageid.messageid' APIs ('MessageID',
+  'MessageIDFactory') in favor of replacements in 'zope.i18nmessageid.message'
+  ('Message', 'MessageFactory').  Deprecated items are scheduled for removal
+  in Zope 3.3.
 
-zope.i18nmessageid version 3.0.0 (2004/11/07)
----------------------------------------------
+Version 3.0.0 (2004/11/07)
+--------------------------
 
-Corresponds to the verison of the zope.i18nmessageid package shipped as
-part of the Zope X3.0.0 release.
+- Corresponds to the verison of the zope.i18nmessageid package shipped as
+  part of the Zope X3.0.0 release.
