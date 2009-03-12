@@ -27,10 +27,12 @@ def read(*rnames):
 setup(name='zope.i18nmessageid',
     version = '3.5.0dev',
     author='Zope Corporation and Contributors',
-    author_email='zope3-dev@zope.org',
-    description='Zope 3 i18n Message Identifier',
+    author_email='zope-dev@zope.org',
+    description='Message Identifiers for internationalization',
     long_description=(
         read('README.txt')
+        + '\n\n.. contents::\n\n' +
+        read('src', 'zope', 'i18nmessageid', 'messages.txt')
         + '\n\n' +
         read('CHANGES.txt')
         ),
