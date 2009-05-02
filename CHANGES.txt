@@ -5,6 +5,8 @@ CHANGES
 3.5.0 (unreleased)
 ------------------
 
+- Made compilation of C extension optional.
+
 - Added support to bootstrap on Jython.
 
 - Changed package's mailing list address from zope3-dev at zope.org to
