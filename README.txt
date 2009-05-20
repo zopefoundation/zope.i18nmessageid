@@ -17,6 +17,6 @@ translation.  They are created by a message factory. The message
 factory is created by calling ``MessageFactory`` with the source
 domain.
 
-This package provides facilities for *delaring* such messages within
+This package provides facilities for *declaring* such messages within
 program source text;  translation of the messages is the responsiblitiy
 of the 'zope.i18n' package.
