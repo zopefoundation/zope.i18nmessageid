@@ -1,12 +1,3 @@
-#!/usr/bin/python2.6
-
-import sys
-
-sys.path[0:0] = [
-  '/home/kobold/buildbot/ztk/zope.i18nmessageid-py2.6-64bit-linux/build/src',
-  '/home/kobold/.buildout/eggs/setuptools-0.6c9-py2.6.egg',
-]
-
 ##############################################################################
 #
 # Copyright (c) 2006 Zope Corporation and Contributors.
