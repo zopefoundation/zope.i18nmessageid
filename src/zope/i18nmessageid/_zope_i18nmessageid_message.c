@@ -142,7 +142,7 @@ static void
 Message_dealloc(Message *self)
 {
   Message_clear(self);
-  self->base.ob_type->tp_free((PyObject*)self);
+  PyUnicode_Type.tp_dealloc((PyObject*)self);
 }
 
 static PyObject *
