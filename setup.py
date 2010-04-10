@@ -44,7 +44,7 @@ codeoptimization = Feature("Optional code optimizations",
 )
 
 setup(name='zope.i18nmessageid',
-    version = '3.5.1',
+    version = '3.5.2dev',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
     description='Message Identifiers for internationalization',
