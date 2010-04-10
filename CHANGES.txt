@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-3.5.1 (unreleased)
+3.5.1 (2010-04-10)
 ------------------
 
 - LP #257657 / 489529:  Fix memory leak in C extension.

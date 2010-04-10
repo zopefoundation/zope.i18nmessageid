@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2006 Zope Corporation and Contributors.
+# Copyright (c) 2006 Zope Foundation and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -45,7 +45,7 @@ codeoptimization = Feature("Optional code optimizations",
 
 setup(name='zope.i18nmessageid',
     version = '3.5.1dev',
-    author='Zope Corporation and Contributors',
+    author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
     description='Message Identifiers for internationalization',
     long_description=(
