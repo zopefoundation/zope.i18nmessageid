@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-3.5.1 (unreleased)
+3.5.2 (unreleased)
 ------------------
 
 - No changes yet.
