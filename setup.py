@@ -22,13 +22,8 @@ $Id$
 """
 
 import os
-import sys
 
 from setuptools import setup, find_packages, Extension, Feature
-from distutils.command.build_ext import build_ext
-from distutils.errors import CCompilerError
-from distutils.errors import DistutilsExecError
-from distutils.errors import DistutilsPlatformError
 
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
@@ -55,7 +50,7 @@ setup(name='zope.i18nmessageid',
         + '\n\n' +
         read('CHANGES.txt')
         ),
-    keywords = "zope3 i18n message factory",
+    keywords = "zope i18n message factory",
     classifiers = [
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
@@ -72,7 +67,6 @@ setup(name='zope.i18nmessageid',
     package_dir = {'': 'src'},
     features = {'codeoptimization': codeoptimization},
     namespace_packages=['zope',],
-    tests_require = ['zope.testing'],
     install_requires=['setuptools'],
     include_package_data = True,
     zip_safe = False,
