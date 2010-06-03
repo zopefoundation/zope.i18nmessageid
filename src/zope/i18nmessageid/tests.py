@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Message ID tests.
-
-$Id$
 """
 import unittest
 from doctest import DocFileSuite

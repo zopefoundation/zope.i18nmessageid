@@ -12,8 +12,6 @@
 #
 ############################################################################*/
 
-/* $Id$ */
-
 #include "Python.h"
 
 /* these macros make gc support easier; they are only available in

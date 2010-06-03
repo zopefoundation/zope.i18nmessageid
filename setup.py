@@ -17,8 +17,6 @@
 # Zope Toolkit policies as described by this documentation.
 ##############################################################################
 """Setup for zope.i18nmessageid package
-
-$Id$
 """
 
 import os

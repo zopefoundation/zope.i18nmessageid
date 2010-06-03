@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """I18n Messages
-
-$Id$
 """
 from zope.i18nmessageid.message import Message, MessageFactory
 
