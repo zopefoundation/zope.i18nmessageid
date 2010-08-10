@@ -5,6 +5,16 @@ CHANGES
 3.5.3 (unreleased)
 ------------------
 
+- Made compilation of C extension optional again; 3.5.1 broke this
+  inasmuch as this package become unusable on non-CPython platforms.
+  Making the compilation of the C extension optional again implied
+  removing ``setup.py`` code added in 3.5.1 which made the C extension
+  a setuptools "Feature" and readding code from 3.5.0 which overrides
+  the distutils ``build_ext`` command.
+
+- Move pickle equality tests into a unittest.TestCase test to make it
+  easier to condition the tests on whether the C extension has been
+  compiled.  This also makes the tests pass on Jython.
 
 3.5.2 (2010-04-30)
 ------------------

@@ -27,7 +27,7 @@ class Message(unicode):
     These are the doc tests from message.txt. Note that we have to create the
     message manually since MessageFactory would return the C implementation.
 
-    >>> from zope.i18nmessageid.message import pyMessage as Message
+    >>> from zope.i18nmessageid.message import Message
     >>> robot = Message(u"robot-message", 'futurama', u"${name} is a robot.")
 
     >>> robot
@@ -38,10 +38,6 @@ class Message(unicode):
     >>> robot.default
     u'${name} is a robot.'
     >>> robot.mapping
-
-    Only the python implementation has a _readonly attribute
-    >>> robot._readonly
-    True
 
     >>> robot.domain = "planetexpress"
     Traceback (most recent call last):
@@ -81,56 +77,14 @@ class Message(unicode):
     >>> args
     (u'fembot', None, None, None)
 
-    Change classes for pickle tests
-    >>> import zope.i18nmessageid.message
-    >>> oldMessage = zope.i18nmessageid.message.Message
-    >>> zope.i18nmessageid.message.Message = Message
-
-    At first check if pickling and unpicklung from pyMessage to pyMessage works
+    Check if pickling and unpickling works
     >>> from pickle import dumps, loads
     >>> pystate = dumps(new_robot)
     >>> pickle_bot = loads(pystate)
     >>> pickle_bot, pickle_bot.domain, pickle_bot.default, pickle_bot.mapping
     (u'robot-message', 'futurama', u'${name} is a robot.', {u'name': u'Bender'})
-    >>> pickle_bot._readonly
+    >>> pickle_bot.__reduce__()[0] is Message
     True
-    >>> from zope.i18nmessageid.message import pyMessage
-    >>> pickle_bot.__reduce__()[0] is pyMessage
-    True
-    >>> del pickle_bot
-
-    At second check if cMessage is able to load the state of a pyMessage
-    >>> from _zope_i18nmessageid_message import Message
-    >>> zope.i18nmessageid.message.Message = Message
-    >>> c_bot = loads(pystate)
-    >>> c_bot, c_bot.domain, c_bot.default, c_bot.mapping
-    (u'robot-message', 'futurama', u'${name} is a robot.', {u'name': u'Bender'})
-    >>> c_bot._readonly
-    Traceback (most recent call last):
-    AttributeError: 'zope.i18nmessageid.message.Message' object has no attribute '_readonly'
-    >>> from _zope_i18nmessageid_message import Message as cMessage
-    >>> c_bot.__reduce__()[0] is cMessage
-    True
-
-    At last check if pyMessage can load a state of cMessage
-    >>> cstate = dumps(c_bot)
-    >>> del c_bot
-    >>> from zope.i18nmessageid.message import pyMessage as Message
-    >>> zope.i18nmessageid.message.Message = Message
-    >>> py_bot = loads(cstate)
-    >>> py_bot, py_bot.domain, py_bot.default, py_bot.mapping
-    (u'robot-message', 'futurama', u'${name} is a robot.', {u'name': u'Bender'})
-    >>> py_bot._readonly
-    True
-    >>> py_bot.__reduce__()[0] is pyMessage
-    True
-
-    Both pickle states should be equal
-    >>> pystate == cstate
-    True
-
-    Finally restore classes for other unit tests
-    >>> zope.i18nmessageid.message.Message = oldMessage
     """
 
     __slots__ = ('domain', 'default', 'mapping', '_readonly')
@@ -173,7 +127,7 @@ pyMessage = Message
 
 try:
     from _zope_i18nmessageid_message import Message
-except ImportError:
+except ImportError: # pragma: no cover
     pass
 
 class MessageFactory(object):
