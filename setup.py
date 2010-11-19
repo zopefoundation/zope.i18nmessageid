@@ -43,11 +43,11 @@ class optional_build_ext(build_ext):
             self._unavailable(e)
 
     def build_extension(self, ext):
-       try:
-           build_ext.build_extension(self, ext)
+        try:
+            build_ext.build_extension(self, ext)
         
-       except (CCompilerError, DistutilsExecError), e:
-           self._unavailable(e)
+        except (CCompilerError, DistutilsExecError), e:
+            self._unavailable(e)
 
     def _unavailable(self, e):
         print >> sys.stderr, '*' * 80
