@@ -48,16 +48,16 @@ with a string that needs to be translatable:
 
 Messages at first seem like they are unicode strings:
 
-  >>> robot
-  u'robot-message'
+  >>> robot == u'robot-message'
+  True
   >>> isinstance(robot, unicode)
   True
 
 The additional domain, default and mapping information is available
 through attributes:
 
-  >>> robot.default
-  u'${name} is a robot.'
+  >>> robot.default == u'${name} is a robot.'
+  True
   >>> robot.mapping
   >>> robot.domain
   'futurama'
@@ -84,30 +84,29 @@ If you need to change their information, you'll have to make a new
 message id object:
 
   >>> new_robot = Message(robot, mapping={u'name': u'Bender'})
-  >>> new_robot
-  u'robot-message'
+  >>> new_robot == u'robot-message'
+  True
   >>> new_robot.domain
   'futurama'
-  >>> new_robot.default
-  u'${name} is a robot.'
-  >>> new_robot.mapping
-  {u'name': u'Bender'}
+  >>> new_robot.default == u'${name} is a robot.'
+  True
+  >>> new_robot.mapping == {u'name': u'Bender'}
+  True
 
 Last but not least, messages are reduceable for pickling:
 
   >>> callable, args = new_robot.__reduce__()
   >>> callable is Message
   True
-  >>> args
-  (u'robot-message', 'futurama', u'${name} is a robot.', {u'name': u'Bender'})
+  >>> args == (u'robot-message', 'futurama', u'${name} is a robot.', {u'name': u'Bender'})
+  True
 
   >>> fembot = Message(u'fembot')
   >>> callable, args = fembot.__reduce__()
   >>> callable is Message
   True
-  >>> args
-  (u'fembot', None, None, None)
-
+  >>> args == (u'fembot', None, None, None)
+  True
 
 Message IDs and backward compatability
 --------------------------------------

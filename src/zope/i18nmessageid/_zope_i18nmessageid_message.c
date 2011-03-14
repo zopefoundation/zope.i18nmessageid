@@ -14,6 +14,23 @@
 
 #include "Python.h"
 
+/* Support for Python < 2.6: */
+
+#ifndef Py_TYPE
+  #define Py_TYPE(ob) (((PyObject*)(ob))->ob_type)
+#endif
+
+#ifndef PyVarObject_HEAD_INIT
+    #define PyVarObject_HEAD_INIT(type, size) \
+	PyObject_HEAD_INIT(type) size,
+#endif
+
+#if PY_MAJOR_VERSION >= 3
+  #define MOD_ERROR_VAL NULL
+#else
+  #define MOD_ERROR_VAL
+#endif
+
 /* these macros make gc support easier; they are only available in
    Python 2.4 and borrowed from there */
 
@@ -112,9 +129,9 @@ Message_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 #include "structmember.h"
 
 static PyMemberDef Message_members[] = {
-  { "domain", T_OBJECT, offsetof(Message, domain), RO },
-  { "default", T_OBJECT, offsetof(Message, default_), RO },
-  { "mapping", T_OBJECT, offsetof(Message, mapping), RO },
+  { "domain", T_OBJECT, offsetof(Message, domain), READONLY },
+  { "default", T_OBJECT, offsetof(Message, default_), READONLY },
+  { "mapping", T_OBJECT, offsetof(Message, mapping), READONLY },
   {NULL}	/* Sentinel */
 };
 
@@ -150,7 +167,7 @@ Message_reduce(Message *self)
   value = PyObject_CallFunctionObjArgs((PyObject *)&PyUnicode_Type, self, NULL);
   if (value == NULL)
     return NULL;
-  result = Py_BuildValue("(O(OOOO))", self->base.ob_type,
+  result = Py_BuildValue("(O(OOOO))", Py_TYPE(&(self->base)),
 			 value,
 			 self->domain ? self->domain : Py_None,
 			 self->default_ ? self->default_ : Py_None,
@@ -175,10 +192,9 @@ static char MessageType__doc__[] =
 "no translation domain.  default may also be None, in which case the\n"
 "message id itself implicitly serves as the default text.\n";
 
-statichere PyTypeObject
+static PyTypeObject
 MessageType = {
-	PyObject_HEAD_INIT(NULL)
-	/* ob_size           */ 0,
+	PyVarObject_HEAD_INIT(NULL, 0)
 	/* tp_name           */ "zope.i18nmessageid.message."
                                 "Message",
 	/* tp_basicsize      */ sizeof(Message),
@@ -187,7 +203,7 @@ MessageType = {
 	/* tp_print          */ (printfunc)0,
 	/* tp_getattr        */ (getattrfunc)0,
 	/* tp_setattr        */ (setattrfunc)0,
-	/* tp_compare        */ (cmpfunc)0,
+	/* tp_compare        */ 0,
 	/* tp_repr           */ (reprfunc)0,
 	/* tp_as_number      */ 0,
 	/* tp_as_sequence    */ 0,
@@ -228,37 +244,65 @@ MessageType = {
 
 
 /* List of methods defined in the module */
-
 static struct PyMethodDef _zope_i18nmessageid_message_methods[] = {
-  {NULL, (PyCFunction)NULL, 0, NULL}         /* sentinel */
+  {NULL, (PyCFunction)NULL, 0, NULL},         /* sentinel */
 };
 
+static char _zope_i18nmessageid_message_module_name[] =
+"_zope_i18nmessageid_message";
 
 static char _zope_i18nmessageid_message_module_documentation[] = 
-"I18n Messages"
-;
+"I18n Messages";
+
+#if PY_MAJOR_VERSION >= 3
+  static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT,
+    _zope_i18nmessageid_message_module_name,/* m_name */
+    _zope_i18nmessageid_message_module_documentation,/* m_doc */
+    -1,/* m_size */
+    _zope_i18nmessageid_message_methods,/* m_methods */
+    NULL,/* m_reload */
+    NULL,/* m_traverse */
+    NULL,/* m_clear */
+    NULL,/* m_free */
+  };
+#endif
 
 #ifndef PyMODINIT_FUNC	/* declarations for DLL import/export */
-#define PyMODINIT_FUNC void
+  #define PyMODINIT_FUNC void
 #endif
+
 PyMODINIT_FUNC
-init_zope_i18nmessageid_message(void)
+#if PY_MAJOR_VERSION >= 3
+ PyInit__zope_i18nmessageid_message(void)
+#else
+ init_zope_i18nmessageid_message(void)
+#endif
 {
   PyObject *m;
   /* Initialize types: */
   MessageType.tp_base = &PyUnicode_Type;
   if (PyType_Ready(&MessageType) < 0)
-    return;
+    return MOD_ERROR_VAL;
         
   /* Create the module and add the functions */
-  m = Py_InitModule3("_zope_i18nmessageid_message",
+#if PY_MAJOR_VERSION >= 3
+  m = PyModule_Create(&moduledef);
+#else
+  m = Py_InitModule3(_zope_i18nmessageid_message_module_name,
                      _zope_i18nmessageid_message_methods,
                      _zope_i18nmessageid_message_module_documentation);
-
+#endif
+   
   if (m == NULL)
-    return;
+    return MOD_ERROR_VAL;
        
   /* Add types: */
   if (PyModule_AddObject(m, "Message", (PyObject *)&MessageType) < 0)
-    return;
+    return MOD_ERROR_VAL;
+
+#if PY_MAJOR_VERSION >= 3
+  return m;
+#endif
+
 }

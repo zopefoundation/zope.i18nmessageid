@@ -28,6 +28,15 @@ from distutils.errors import CCompilerError
 from distutils.errors import DistutilsExecError
 from distutils.errors import DistutilsPlatformError
 
+if sys.version_info >= (3,):
+    extra = dict(use_2to3 = True,
+                 convert_2to3_doctests = [
+                     'src/zope/i18nmessageid/messages.txt',
+                     ],
+                 )
+else:
+    extra = {}
+
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
@@ -39,26 +48,33 @@ class optional_build_ext(build_ext):
         try:
             build_ext.run(self)
         
-        except DistutilsPlatformError, e:
-            self._unavailable(e)
+        except DistutilsPlatformError:
+            # The sys.exc_info()[1] is to preserve compatibility with both
+            # Python 2.5 and 3.x, which is needed in setup.py.
+            self._unavailable(sys.exc_info()[1])
 
     def build_extension(self, ext):
         try:
             build_ext.build_extension(self, ext)
         
-        except (CCompilerError, DistutilsExecError), e:
-            self._unavailable(e)
+        except (CCompilerError, DistutilsExecError):
+            # The sys.exc_info()[1] is to preserve compatibility with both
+            # Python 2.5 and 3.x, which is needed in setup.py.
+            self._unavailable(sys.exc_info()[1])
 
     def _unavailable(self, e):
-        print >> sys.stderr, '*' * 80
-        print >> sys.stderr, """WARNING:
+        # Write directly to stderr to preserve compatibility with both
+        # Python 2.5 and 3.x, which is needed in setup.py.
+        sys.stderr.write('*' * 80 + '\n')
+        sys.stderr.write("""WARNING:
 
         An optional code optimization (C extension) could not be compiled.
 
-        Optimizations for this package will not be available!"""
-        print >> sys.stderr
-        print >> sys.stderr, e
-        print >> sys.stderr, '*' * 80
+        Optimizations for this package will not be available!
+        
+        """)
+        sys.stderr.write(str(e) + '\n')
+        sys.stderr.write('*' * 80 + '\n')
 
 
 setup(name='zope.i18nmessageid',
@@ -80,6 +96,7 @@ setup(name='zope.i18nmessageid',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Zope Public License',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Topic :: Internet :: WWW/HTTP',
@@ -99,5 +116,6 @@ setup(name='zope.i18nmessageid',
     test_suite='zope.i18nmessageid.tests.test_suite',
     zip_safe = False,
     cmdclass = {'build_ext':optional_build_ext},
+    **extra
     )
 

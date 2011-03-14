@@ -30,13 +30,13 @@ class Message(unicode):
     >>> from zope.i18nmessageid.message import Message
     >>> robot = Message(u"robot-message", 'futurama', u"${name} is a robot.")
 
-    >>> robot
-    u'robot-message'
+    >>> robot == u'robot-message'
+    True
     >>> isinstance(robot, unicode)
     True
 
-    >>> robot.default
-    u'${name} is a robot.'
+    >>> robot.default == u'${name} is a robot.'
+    True
     >>> robot.mapping
 
     >>> robot.domain = "planetexpress"
@@ -55,34 +55,34 @@ class Message(unicode):
     TypeError: readonly attribute
 
     >>> new_robot = Message(robot, mapping={u'name': u'Bender'})
-    >>> new_robot
-    u'robot-message'
-    >>> new_robot.domain
-    'futurama'
-    >>> new_robot.default
-    u'${name} is a robot.'
-    >>> new_robot.mapping
-    {u'name': u'Bender'}
+    >>> new_robot == u'robot-message'
+    True
+    >>> new_robot.domain == 'futurama'
+    True
+    >>> new_robot.default == u'${name} is a robot.'
+    True
+    >>> new_robot.mapping == {u'name': u'Bender'}
+    True
 
     >>> callable, args = new_robot.__reduce__()
     >>> callable is Message
     True
-    >>> args
-    (u'robot-message', 'futurama', u'${name} is a robot.', {u'name': u'Bender'})
+    >>> args == (u'robot-message', 'futurama', u'${name} is a robot.', {u'name': u'Bender'})
+    True
 
     >>> fembot = Message(u'fembot')
     >>> callable, args = fembot.__reduce__()
     >>> callable is Message
     True
-    >>> args
-    (u'fembot', None, None, None)
+    >>> args == (u'fembot', None, None, None)
+    True
 
     Check if pickling and unpickling works
     >>> from pickle import dumps, loads
     >>> pystate = dumps(new_robot)
     >>> pickle_bot = loads(pystate)
-    >>> pickle_bot, pickle_bot.domain, pickle_bot.default, pickle_bot.mapping
-    (u'robot-message', 'futurama', u'${name} is a robot.', {u'name': u'Bender'})
+    >>> (pickle_bot, pickle_bot.domain, pickle_bot.default, pickle_bot.mapping) == (u'robot-message', 'futurama', u'${name} is a robot.', {u'name': u'Bender'})
+    True
     >>> pickle_bot.__reduce__()[0] is Message
     True
     """
