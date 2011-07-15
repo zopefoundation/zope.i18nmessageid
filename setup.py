@@ -22,20 +22,42 @@
 import os
 import sys
 
-from setuptools import setup, find_packages, Extension
+from setuptools import setup, find_packages, Extension, Feature
 from distutils.command.build_ext import build_ext
 from distutils.errors import CCompilerError
 from distutils.errors import DistutilsExecError
 from distutils.errors import DistutilsPlatformError
+import platform
+
+py_impl = getattr(platform, 'python_implementation', lambda: None)
+is_pypy = py_impl() == 'PyPy'
+is_jython = 'java' in sys.platform
+
+codeoptimization_c = os.path.join('src', 'zope', 'i18nmessageid',
+                                  "_zope_i18nmessageid_message.c")
+codeoptimization = Feature(
+    "Optional code optimizations",
+    standard = True,
+    ext_modules = [Extension(
+        "zope.i18nmessageid._zope_i18nmessageid_message",
+        [os.path.normcase(codeoptimization_c)]
+        )])
+
+if is_pypy or is_jython:
+    # Jython cannot build the C optimizations, while on PyPy they are
+    # anti-optimizations (the C extension compatibility layer is known-slow,
+    # and defeats JIT opportunities).
+    extra = {}
+else:
+    extra = {'features':{'codeoptimization':codeoptimization}}
 
 if sys.version_info >= (3,):
-    extra = dict(use_2to3 = True,
+    extra.update(dict(use_2to3 = True,
                  convert_2to3_doctests = [
                      'src/zope/i18nmessageid/messages.txt',
                      ],
+                      )
                  )
-else:
-    extra = {}
 
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
@@ -111,11 +133,6 @@ setup(name='zope.i18nmessageid',
     url='http://pypi.python.org/pypi/zope.i18nmessageid',
     packages=find_packages('src'),
     package_dir = {'': 'src'},
-    ext_modules=[
-        Extension("zope.i18nmessageid._zope_i18nmessageid_message",
-                  [os.path.join('src', 'zope', 'i18nmessageid',
-                                "_zope_i18nmessageid_message.c") ]),
-        ],
     namespace_packages=['zope',],
     install_requires=['setuptools'],
     include_package_data = True,
