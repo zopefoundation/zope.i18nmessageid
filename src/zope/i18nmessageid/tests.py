@@ -33,7 +33,7 @@ class PickleEqualityTests(unittest.TestCase):
         robot = Message(u"robot-message", 'futurama', u"${name} is a robot.")
 
         self.assertEqual(robot, u'robot-message')
-        self.failUnless(isinstance(robot, unicode))
+        self.assertTrue(isinstance(robot, unicode))
         self.assertEqual(robot.default, u'${name} is a robot.')
         self.assertEqual(robot.mapping, None)
 
@@ -56,7 +56,7 @@ class PickleEqualityTests(unittest.TestCase):
         self.assertEqual(new_robot.mapping, {u'name': u'Bender'})
 
         callable, args = new_robot.__reduce__()
-        self.failUnless(callable is Message)
+        self.assertTrue(callable is Message)
         self.assertEqual(
             args,
             (u'robot-message', 'futurama', u'${name} is a robot.',
@@ -64,7 +64,7 @@ class PickleEqualityTests(unittest.TestCase):
 
         fembot = Message(u'fembot')
         callable, args = fembot.__reduce__()
-        self.failUnless(callable is Message)
+        self.assertTrue(callable is Message)
         self.assertEqual(args, (u'fembot', None, None, None))
 
         import zope.i18nmessageid.message
@@ -82,7 +82,7 @@ class PickleEqualityTests(unittest.TestCase):
         self.assertEqual(pickle_bot._readonly, True)
 
         from zope.i18nmessageid.message import pyMessage
-        self.failUnless(pickle_bot.__reduce__()[0] is pyMessage)
+        self.assertTrue(pickle_bot.__reduce__()[0] is pyMessage)
         del pickle_bot
 
         # Second check if cMessage is able to load the state of a pyMessage
@@ -93,9 +93,9 @@ class PickleEqualityTests(unittest.TestCase):
         self.assertEqual(c_bot.domain, 'futurama')
         self.assertEqual(c_bot.default, u'${name} is a robot.')
         self.assertEqual(c_bot.mapping, {u'name': u'Bender'})
-        self.failIf(hasattr(c_bot, '_readonly'))
+        self.assertFalse(hasattr(c_bot, '_readonly'))
         from zope.i18nmessageid._zope_i18nmessageid_message import Message as cMessage
-        self.failUnless(c_bot.__reduce__()[0] is cMessage)
+        self.assertTrue(c_bot.__reduce__()[0] is cMessage)
 
         # Last check if pyMessage can load a state of cMessage
         cstate = dumps(c_bot)
@@ -108,7 +108,7 @@ class PickleEqualityTests(unittest.TestCase):
         self.assertEqual(py_bot.default, u'${name} is a robot.')
         self.assertEqual(py_bot.mapping, {u'name': u'Bender'})
         self.assertEqual(py_bot._readonly, True)
-        self.failUnless(py_bot.__reduce__()[0] is pyMessage)
+        self.assertTrue(py_bot.__reduce__()[0] is pyMessage)
 
         # Both pickle states should be equal
         self.assertEqual(pystate, cstate)
