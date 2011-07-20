@@ -2,7 +2,12 @@
 CHANGES
 =======
 
-3.6.0 (unreleased)
+3.6.1 (2011-07-20)
+------------------
+
+- Correct metadata in this file for release date.
+
+3.6.0 (2011-07-20)
 ------------------
 
 - Python 3 support.
