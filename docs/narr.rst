@@ -16,16 +16,17 @@ Messages and Domains
 
 We can think of a source domain as a collection of messages and
 associated translation strings.  The domain helps to disambiguate messages
-based on context:  for instance, the message whose source string is "draw"
+based on context:  for instance, the message whose source string is ``draw``
 means one thing in a first-person shooter game, and quite another in a
 graphics package:  in the first case, the domain for the message might
-be "doom", while in the second it might be "gimp".
+be ``ok_corral``, while in the second it might be ``gimp``.
 
 We often need to create unicode strings that will be displayed by
 separate views.  The view cannot translate the string without knowing
 its source domain.  A string or unicode literal carries no domain
-information, therefore we use messages.  Messages are unicode strings
-which carry a translation source domain and possibly a default
+information, therefore we use instances of the
+:class:`~zope.i18nmessageid.message.Message` class.  Messages are unicode
+strings which carry a translation source domain and possibly a default
 translation.
 
 Message Factories
@@ -44,7 +45,7 @@ corresponding to the project which manages the corrresponding translations.
   >>> foo.domain
   'myproject'
 
-The Zope project uses the "zope" domain for its messages.  This package
+The Zope project uses the ``zope`` domain for its messages.  This package
 exports an already-created factory for that domain:
 
 .. doctest::
