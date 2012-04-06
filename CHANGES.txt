@@ -5,6 +5,8 @@ CHANGES
 4.0.0 (unreleased)
 ------------------
 
+- 100% unit test coverage.
+
 - Move doctest examples into Sphinx documentation.
 
 - Dropped explicit support for Python 2.4 / 2.5 / 3.1.
