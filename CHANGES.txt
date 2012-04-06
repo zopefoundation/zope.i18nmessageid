@@ -5,6 +5,8 @@ CHANGES
 4.0.0 (unreleased)
 ------------------
 
+- Move doctest examples into Sphinx documentation.
+
 - Dropped explicit support for Python 2.4 / 2.5 / 3.1.
 
 - Added explicit support for PyPy.

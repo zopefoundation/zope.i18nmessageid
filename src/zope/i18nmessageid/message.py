@@ -11,7 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""I18n Messages
+"""I18n Messages and factories.
 """
 __docformat__ = "reStructuredText"
 
@@ -23,77 +23,6 @@ class Message(unicode):
     display when there is no translation.  domain may be None meaning there is
     no translation domain.  default may also be None, in which case the
     message id itself implicitly serves as the default text.
-
-    These are the doc tests from message.txt. Note that we have to create the
-    message manually since MessageFactory would return the C implementation.
-
-    >>> from zope.i18nmessageid.message import Message
-    >>> robot = Message(u"robot-message", 'futurama', u"${name} is a robot.")
-
-    >>> robot == u'robot-message'
-    True
-    >>> isinstance(robot, unicode)
-    True
-
-    >>> robot.default == u'${name} is a robot.'
-    True
-    >>> robot.mapping
-
-    >>> robot.domain = "planetexpress"
-    Traceback (most recent call last):
-    ...
-    TypeError: readonly attribute
-
-    >>> robot.default = u"${name} is not a robot."
-    Traceback (most recent call last):
-    ...
-    TypeError: readonly attribute
-
-    >>> robot.mapping = {u'name': u'Bender'}
-    Traceback (most recent call last):
-    ...
-    TypeError: readonly attribute
-
-    >>> new_robot = Message(robot, mapping={u'name': u'Bender'})
-    >>> new_robot == u'robot-message'
-    True
-    >>> new_robot.domain == 'futurama'
-    True
-    >>> new_robot.default == u'${name} is a robot.'
-    True
-    >>> new_robot.mapping == {u'name': u'Bender'}
-    True
-
-    >>> callable, args = new_robot.__reduce__()
-    >>> callable is Message
-    True
-    >>> args == (u'robot-message',
-    ...          'futurama',
-    ...          u'${name} is a robot.',
-    ...          {u'name': u'Bender'})
-    True
-
-    >>> fembot = Message(u'fembot')
-    >>> callable, args = fembot.__reduce__()
-    >>> callable is Message
-    True
-    >>> args == (u'fembot', None, None, None)
-    True
-
-    Check if pickling and unpickling works
-    >>> from pickle import dumps, loads
-    >>> pystate = dumps(new_robot)
-    >>> pickle_bot = loads(pystate)
-    >>> (pickle_bot,
-    ...  pickle_bot.domain,
-    ...  pickle_bot.default,
-    ...  pickle_bot.mapping) == (u'robot-message',
-    ...                          'futurama',
-    ...                          u'${name} is a robot.',
-    ...                          {u'name': u'Bender'})
-    True
-    >>> pickle_bot.__reduce__()[0] is Message
-    True
     """
 
     __slots__ = ('domain', 'default', 'mapping', '_readonly')
@@ -125,13 +54,13 @@ class Message(unicode):
         else:
             return unicode.__setattr__(self, key, value)
 
-    def __reduce__(self):
-        return self.__class__, self.__getstate__()
-
     def __getstate__(self):
         return unicode(self), self.domain, self.default, self.mapping
 
-# save a copy for the unit tests
+    def __reduce__(self):
+        return self.__class__, self.__getstate__()
+
+# Name the fallback Python implementation to make it easier to test.
 pyMessage = Message
 
 try:

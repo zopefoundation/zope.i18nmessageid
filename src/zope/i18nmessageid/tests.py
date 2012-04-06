@@ -14,19 +14,109 @@
 """Message ID tests.
 """
 import unittest
-from doctest import DocFileSuite
-from doctest import DocTestSuite
 
-class PickleEqualityTests(unittest.TestCase):
-    def setUp(self):
-        # set the C version up as the used version
-        import zope.i18nmessageid.message
-        self.oldMessage = zope.i18nmessageid.message.Message
+class PyMessageTests(unittest.TestCase):
 
-    def tearDown(self):
-        # set the original version back up as the used version
-        import zope.i18nmessageid.message
-        zope.i18nmessageid.message.Message = self.oldMessage
+    _TEST_REAOONLY = True
+
+    def _getTargetClass(self):
+        from zope.i18nmessageid.message import pyMessage
+        return pyMessage
+
+    def _makeOne(self, *args, **kw):
+        return self._getTargetClass()(*args, **kw)
+
+    def test_ctor_defaults(self):
+        message = self._makeOne('testing')
+        self.assertEqual(message, 'testing')
+        self.assertEqual(message.domain, None)
+        self.assertEqual(message.default, None)
+        self.assertEqual(message.mapping, None)
+        if self._TEST_REAOONLY:
+            self.assertTrue(message._readonly)
+
+    def test_ctor_explicit(self):
+        mapping = {'key': 'value'}
+        message = self._makeOne('testing', 'domain', 'default', mapping)
+        self.assertEqual(message, 'testing')
+        self.assertEqual(message.domain, 'domain')
+        self.assertEqual(message.default, 'default')
+        self.assertEqual(message.mapping, mapping)
+        if self._TEST_REAOONLY:
+            self.assertTrue(message._readonly)
+
+    def test_ctor_copy(self):
+        mapping = {'key': 'value'}
+        source = self._makeOne('testing', 'domain', 'default', mapping)
+        message = self._makeOne(source)
+        self.assertEqual(message, 'testing')
+        self.assertEqual(message.domain, 'domain')
+        self.assertEqual(message.default, 'default')
+        self.assertEqual(message.mapping, mapping)
+        if self._TEST_REAOONLY:
+            self.assertTrue(message._readonly)
+
+    def test_ctor_copy_w_overrides(self):
+        mapping = {'key': 'value'}
+        source = self._makeOne('testing')
+        message = self._makeOne(source, 'domain', 'default', mapping)
+        self.assertEqual(message, 'testing')
+        self.assertEqual(message.domain, 'domain')
+        self.assertEqual(message.default, 'default')
+        self.assertEqual(message.mapping, mapping)
+        if self._TEST_REAOONLY:
+            self.assertTrue(message._readonly)
+
+    def test_domain_immutable(self):
+        message = self._makeOne('testing')
+        def _try():
+            message.domain = 'domain'
+        self.assertRaises(TypeError, _try)
+
+    def test_default_immutable(self):
+        message = self._makeOne('testing')
+        def _try():
+            message.default = 'default'
+        self.assertRaises(TypeError, _try)
+
+    def test_mapping_immutable(self):
+        mapping = {'key': 'value'}
+        message = self._makeOne('testing')
+        def _try():
+            message.mapping = mapping
+        self.assertRaises(TypeError, _try)
+
+    def test_unknown_immutable(self):
+        message = self._makeOne('testing')
+        def _try():
+            message.unknown = 'unknown'
+        self.assertRaises(TypeError, _try)
+
+    def test___getstate__(self):
+        mapping = {'key': 'value'}
+        source = self._makeOne('testing')
+        message = self._makeOne(source, 'domain', 'default', mapping)
+        state = message.__getstate__()
+        self.assertEqual(state, ('testing', 'domain', 'default', mapping))
+
+    def test___reduce__(self):
+        mapping = {'key': 'value'}
+        source = self._makeOne('testing')
+        message = self._makeOne(source, 'domain', 'default', mapping)
+        klass, state = message.__reduce__()
+        self.assertTrue(klass is self._getTargetClass())
+        self.assertEqual(state, ('testing', 'domain', 'default', mapping))
+
+class MessageTests(PyMessageTests):
+
+    _TEST_REAOONLY = False
+
+    def _getTargetClass(self):
+        from zope.i18nmessageid.message import Message
+        return Message
+
+
+class Functional(unittest.TestCase):
 
     def test_message_pickling(self):
         from zope.i18nmessageid.message import pyMessage as Message
@@ -117,23 +207,8 @@ class PickleEqualityTests(unittest.TestCase):
         # Both pickle states should be equal
         self.assertEqual(pystate, cstate)
 
-try:
-    from zope.i18nmessageid._zope_i18nmessageid_message import (
-                                                    Message as import_test)
-    def test_suite():
-        return unittest.TestSuite((
-	    DocTestSuite('zope.i18nmessageid.message'),
-	    DocFileSuite('messages.txt', package='zope.i18nmessageid'),
-            unittest.makeSuite(PickleEqualityTests),
-	    ))
-except ImportError, e: # pragma: no cover
-    print '=' * 80
-    print "Could not import C version:"
-    print e
-    print '=' * 80
-    def test_suite():
-        return unittest.TestSuite((
-	    DocTestSuite('zope.i18nmessageid.message'),
-	    DocFileSuite('messages.txt', package='zope.i18nmessageid'),
-	    ))
-    
+
+def test_suite():
+    return unittest.TestSuite((
+        unittest.makeSuite(PyMessageTests),
+    ))

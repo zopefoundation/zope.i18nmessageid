@@ -106,8 +106,6 @@ setup(name='zope.i18nmessageid',
     description='Message Identifiers for internationalization',
     long_description=(
         read('README.txt')
-        + '\n\n.. contents::\n\n' +
-        read('src', 'zope', 'i18nmessageid', 'messages.txt')
         + '\n\n' +
         read('CHANGES.txt')
         ),
