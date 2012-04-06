@@ -1,6 +1,5 @@
-=============
-I18n Messages
-=============
+Using :mod:`zope.i18nmessageid`
+===============================
 
 Rationale
 ---------
@@ -12,20 +11,43 @@ literals in python programs, text in templates, and some text in XML
 data.  The project implies a source language and an application
 context.
 
+Messages and Domains
+--------------------
+
 We can think of a source domain as a collection of messages and
-associated translation strings.
+associated translation strings.  The domain helps to disambiguate messages
+based on context:  for instance, the message whose source string is "draw"
+means one thing in a first-person shooter game, and quite another in a
+graphics package:  in the first case, the domain for the message might
+be "doom", while in the second it might be "gimp".
 
 We often need to create unicode strings that will be displayed by
 separate views.  The view cannot translate the string without knowing
 its source domain.  A string or unicode literal carries no domain
 information, therefore we use messages.  Messages are unicode strings
 which carry a translation source domain and possibly a default
-translation.  They are created by a message factory. The message
-factory is created by calling ``MessageFactory`` with the source
-domain.
+translation.
 
-ZopeMessageFactory
-------------------
+Message Factories
+-----------------
+
+Messages are created by a message factory belonging to a given translation
+domain. Each message factory is created by instantiating a
+:class:`~zope.i18nmessageid.message.MessageFactory`, passing the domain
+corresponding to the project which manages the corrresponding translations.
+
+.. doctest::
+
+  >>> from zope.i18nmessageid import MessageFactory
+  >>> factory = MessageFactory('myproject')
+  >>> foo = factory('foo')
+  >>> foo.domain
+  'myproject'
+
+The Zope project uses the "zope" domain for its messages.  This package
+exports an already-created factory for that domain:
+
+.. doctest::
 
   >>> from zope.i18nmessageid import ZopeMessageFactory as _z_
   >>> foo = _z_('foo')
@@ -33,20 +55,23 @@ ZopeMessageFactory
   'zope'
   
 
-
-Example
--------
+Example Usage
+-------------
 
 In this example, we create a message factory and assign it to _.  By
 convention, we use _ as the name of our factory to be compatible with
 translatable string extraction tools such as xgettext.  We then call _
 with a string that needs to be translatable:
 
+.. doctest::
+
   >>> from zope.i18nmessageid import MessageFactory, Message
   >>> _ = MessageFactory("futurama")
   >>> robot = _(u"robot-message", u"${name} is a robot.")
 
 Messages at first seem like they are unicode strings:
+
+.. doctest::
 
   >>> robot == u'robot-message'
   True
@@ -56,6 +81,8 @@ Messages at first seem like they are unicode strings:
 The additional domain, default and mapping information is available
 through attributes:
 
+.. doctest::
+
   >>> robot.default == u'${name} is a robot.'
   True
   >>> robot.mapping
@@ -64,6 +91,8 @@ through attributes:
 
 The message's attributes are considered part of the immutable message
 object.  They cannot be changed once the message id is created:
+
+.. doctest::
 
   >>> robot.domain = "planetexpress"
   Traceback (most recent call last):
@@ -83,6 +112,8 @@ object.  They cannot be changed once the message id is created:
 If you need to change their information, you'll have to make a new
 message id object:
 
+.. doctest::
+
   >>> new_robot = Message(robot, mapping={u'name': u'Bender'})
   >>> new_robot == u'robot-message'
   True
@@ -95,10 +126,15 @@ message id object:
 
 Last but not least, messages are reduceable for pickling:
 
+.. doctest::
+
   >>> callable, args = new_robot.__reduce__()
   >>> callable is Message
   True
-  >>> args == (u'robot-message', 'futurama', u'${name} is a robot.', {u'name': u'Bender'})
+  >>> args == (u'robot-message',
+  ...          'futurama',
+  ...          u'${name} is a robot.',
+  ...          {u'name': u'Bender'})
   True
 
   >>> fembot = Message(u'fembot')
@@ -108,26 +144,21 @@ Last but not least, messages are reduceable for pickling:
   >>> args == (u'fembot', None, None, None)
   True
 
-Message IDs and backward compatability
---------------------------------------
+Pickling and unpickling works, which means we can store message IDs in
+a database:
 
-The change to immutability is not a simple refactoring that can be
-coped with backward compatible APIs--it is a change in semantics.
-Because immutability is one of those "you either have it or you don't"
-things (like pregnancy or death), we will not be able to support both
-in one implementation.
+.. doctest::
 
-The proposed solution for backward compatability is to support both
-implementations in parallel, deprecating the mutable one.  A separate
-factory, ``MessageFactory``, instantiates immutable messages, while
-the deprecated old one continues to work like before.
-
-The roadmap to immutable-only message ids is proposed as follows:
-
-  Zope 3.1: Immutable message ids are introduced.  Security
-  declarations for mutable message ids are provided to make the
-  stripping of security proxies unnecessary.
-
-  Zope 3.2: Mutable message ids are deprecated.
-
-  Zope 3.3: Mutable message ids are removed.
+   >>> from pickle import dumps, loads
+   >>> pystate = dumps(new_robot)
+   >>> pickle_bot = loads(pystate)
+   >>> (pickle_bot,
+   ...  pickle_bot.domain,
+   ...  pickle_bot.default,
+   ...  pickle_bot.mapping) == (u'robot-message',
+   ...                          'futurama',
+   ...                          u'${name} is a robot.',
+   ...                          {u'name': u'Bender'})
+   True
+   >>> pickle_bot.__reduce__()[0] is Message
+   True
