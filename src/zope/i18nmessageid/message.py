@@ -67,7 +67,10 @@ class Message(unicode):
     >>> callable, args = new_robot.__reduce__()
     >>> callable is Message
     True
-    >>> args == (u'robot-message', 'futurama', u'${name} is a robot.', {u'name': u'Bender'})
+    >>> args == (u'robot-message',
+    ...          'futurama',
+    ...          u'${name} is a robot.',
+    ...          {u'name': u'Bender'})
     True
 
     >>> fembot = Message(u'fembot')
@@ -81,7 +84,13 @@ class Message(unicode):
     >>> from pickle import dumps, loads
     >>> pystate = dumps(new_robot)
     >>> pickle_bot = loads(pystate)
-    >>> (pickle_bot, pickle_bot.domain, pickle_bot.default, pickle_bot.mapping) == (u'robot-message', 'futurama', u'${name} is a robot.', {u'name': u'Bender'})
+    >>> (pickle_bot,
+    ...  pickle_bot.domain,
+    ...  pickle_bot.default,
+    ...  pickle_bot.mapping) == (u'robot-message',
+    ...                          'futurama',
+    ...                          u'${name} is a robot.',
+    ...                          {u'name': u'Bender'})
     True
     >>> pickle_bot.__reduce__()[0] is Message
     True

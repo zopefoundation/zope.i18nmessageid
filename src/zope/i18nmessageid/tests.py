@@ -87,6 +87,8 @@ class PickleEqualityTests(unittest.TestCase):
 
         # Second check if cMessage is able to load the state of a pyMessage
         from zope.i18nmessageid._zope_i18nmessageid_message import Message
+        from zope.i18nmessageid._zope_i18nmessageid_message import (
+                                                        Message as cMessage)
         zope.i18nmessageid.message.Message = Message
         c_bot = loads(pystate) 
         self.assertEqual(c_bot, u'robot-message')
@@ -94,7 +96,6 @@ class PickleEqualityTests(unittest.TestCase):
         self.assertEqual(c_bot.default, u'${name} is a robot.')
         self.assertEqual(c_bot.mapping, {u'name': u'Bender'})
         self.assertFalse(hasattr(c_bot, '_readonly'))
-        from zope.i18nmessageid._zope_i18nmessageid_message import Message as cMessage
         self.assertTrue(c_bot.__reduce__()[0] is cMessage)
 
         # Last check if pyMessage can load a state of cMessage
@@ -114,7 +115,8 @@ class PickleEqualityTests(unittest.TestCase):
         self.assertEqual(pystate, cstate)
 
 try:
-    from zope.i18nmessageid._zope_i18nmessageid_message import Message as import_test
+    from zope.i18nmessageid._zope_i18nmessageid_message import (
+                                                    Message as import_test)
     def test_suite():
         return unittest.TestSuite((
 	    DocTestSuite('zope.i18nmessageid.message'),
