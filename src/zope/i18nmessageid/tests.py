@@ -86,7 +86,10 @@ class PickleEqualityTests(unittest.TestCase):
         del pickle_bot
 
         # Second check if cMessage is able to load the state of a pyMessage
-        from zope.i18nmessageid._zope_i18nmessageid_message import Message
+        try:
+            from zope.i18nmessageid._zope_i18nmessageid_message import Message
+        except ImportError:
+            return
         from zope.i18nmessageid._zope_i18nmessageid_message import (
                                                         Message as cMessage)
         zope.i18nmessageid.message.Message = Message

@@ -5,6 +5,8 @@ CHANGES
 3.6.2 (unreleased)
 ------------------
 
+- Added explicit support for PyPy.
+
 - Added 'setup.py dev' alias (runs ``setup.py develop`` plus installs
   ``nose`` and ``coverage``).
 
