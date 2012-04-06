@@ -15,6 +15,12 @@
 """
 __docformat__ = "reStructuredText"
 
+try:
+    unicode
+except NameError: #pragma NO COVER Python3
+    unicode = str
+
+
 class Message(unicode):
     """Message (Python implementation)
 

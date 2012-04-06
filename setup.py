@@ -55,11 +55,6 @@ if not is_pypy and not is_jython:
     # and defeats JIT opportunities).
     extra['features'] = {'codeoptimization':codeoptimization}
 
-if sys.version_info >= (3,):
-    extra['use_2to3'] = True
-    extra['convert_2to3_doctests'] = ['src/zope/i18nmessageid/messages.txt',
-                                     ]
-
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
