@@ -5,6 +5,11 @@ CHANGES
 3.6.2 (unreleased)
 ------------------
 
+- Added 'setup.py dev' alias (runs ``setup.py develop`` plus installs
+  ``nose`` and ``coverage``).
+
+- Added 'setup.py docs' alias (installs ``Sphinx`` and dependencies).
+
 
 3.6.1 (2011-07-20)
 ------------------

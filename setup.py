@@ -43,21 +43,22 @@ codeoptimization = Feature(
         [os.path.normcase(codeoptimization_c)]
         )])
 
-if is_pypy or is_jython:
+extra = {
+    'extras_require': {'testing': ['nose', 'coverage'],
+                       'docs': ['Sphinx'],
+                      },
+}
+
+if not is_pypy and not is_jython:
     # Jython cannot build the C optimizations, while on PyPy they are
     # anti-optimizations (the C extension compatibility layer is known-slow,
     # and defeats JIT opportunities).
-    extra = {}
-else:
-    extra = {'features':{'codeoptimization':codeoptimization}}
+    extra['features'] = {'codeoptimization':codeoptimization}
 
 if sys.version_info >= (3,):
-    extra.update(dict(use_2to3 = True,
-                 convert_2to3_doctests = [
-                     'src/zope/i18nmessageid/messages.txt',
-                     ],
-                      )
-                 )
+    extra['use_2to3'] = True
+    extra['convert_2to3_doctests'] = ['src/zope/i18nmessageid/messages.txt',
+                                     ]
 
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
@@ -97,7 +98,6 @@ class optional_build_ext(build_ext):
         """)
         sys.stderr.write(str(e) + '\n')
         sys.stderr.write('*' * 80 + '\n')
-
 
 setup(name='zope.i18nmessageid',
     version = '3.6.2dev',
@@ -140,5 +140,5 @@ setup(name='zope.i18nmessageid',
     zip_safe = False,
     cmdclass = {'build_ext':optional_build_ext},
     **extra
-    )
+)
 
