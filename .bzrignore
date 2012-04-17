@@ -1,0 +1,4 @@
+*.egg-info
+.coverage
+docs/_build
+__pycache__

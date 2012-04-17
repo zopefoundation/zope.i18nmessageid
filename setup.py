@@ -43,21 +43,17 @@ codeoptimization = Feature(
         [os.path.normcase(codeoptimization_c)]
         )])
 
-if is_pypy or is_jython:
+extra = {
+    'extras_require': {'testing': ['nose', 'coverage'],
+                       'docs': ['Sphinx'],
+                      },
+}
+
+if not is_pypy and not is_jython:
     # Jython cannot build the C optimizations, while on PyPy they are
     # anti-optimizations (the C extension compatibility layer is known-slow,
     # and defeats JIT opportunities).
-    extra = {}
-else:
-    extra = {'features':{'codeoptimization':codeoptimization}}
-
-if sys.version_info >= (3,):
-    extra.update(dict(use_2to3 = True,
-                 convert_2to3_doctests = [
-                     'src/zope/i18nmessageid/messages.txt',
-                     ],
-                      )
-                 )
+    extra['features'] = {'codeoptimization':codeoptimization}
 
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
@@ -98,16 +94,13 @@ class optional_build_ext(build_ext):
         sys.stderr.write(str(e) + '\n')
         sys.stderr.write('*' * 80 + '\n')
 
-
 setup(name='zope.i18nmessageid',
-    version = '3.6.2dev',
+    version = '4.0.0dev',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
     description='Message Identifiers for internationalization',
     long_description=(
         read('README.txt')
-        + '\n\n.. contents::\n\n' +
-        read('src', 'zope', 'i18nmessageid', 'messages.txt')
         + '\n\n' +
         read('CHANGES.txt')
         ),
@@ -118,13 +111,12 @@ setup(name='zope.i18nmessageid',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Zope Public License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.4',
-        'Programming Language :: Python :: 2.5',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.1',
         'Programming Language :: Python :: 3.2',
+        "Programming Language :: Python :: Implementation :: CPython",
+        "Programming Language :: Python :: Implementation :: PyPy",
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Topic :: Internet :: WWW/HTTP',
@@ -140,5 +132,5 @@ setup(name='zope.i18nmessageid',
     zip_safe = False,
     cmdclass = {'build_ext':optional_build_ext},
     **extra
-    )
+)
 

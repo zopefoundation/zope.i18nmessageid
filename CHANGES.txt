@@ -2,8 +2,26 @@
 CHANGES
 =======
 
-3.6.2 (unreleased)
+4.0.0 (unreleased)
 ------------------
+
+- Removed use of '2to3' and associated fixers when installing under Py3k.
+  The code is now in a "compatible subset" which supports Python 2.6, 2.7,
+  and 3.2, including PyPy 1.8 (the version compatible with the 2.7 language
+  spec).
+
+- 100% unit test coverage.
+
+- Move doctest examples into Sphinx documentation.
+
+- Dropped explicit support for Python 2.4 / 2.5 / 3.1.
+
+- Added explicit support for PyPy.
+
+- Added 'setup.py dev' alias (runs ``setup.py develop`` plus installs
+  ``nose`` and ``coverage``).
+
+- Added 'setup.py docs' alias (installs ``Sphinx`` and dependencies).
 
 
 3.6.1 (2011-07-20)
