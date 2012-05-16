@@ -20,3 +20,5 @@ domain.
 This package provides facilities for *declaring* such messages within
 program source text;  translation of the messages is the responsiblitiy
 of the 'zope.i18n' package.
+
+Please see http://docs.zope.org/zope.i18nmessageid/ for the documentation.
