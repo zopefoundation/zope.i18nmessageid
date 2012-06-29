@@ -8,6 +8,7 @@ Contents:
 
    narr
    api
+   hacking
 
 
 
