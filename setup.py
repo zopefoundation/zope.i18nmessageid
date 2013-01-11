@@ -100,9 +100,9 @@ setup(name='zope.i18nmessageid',
     author_email='zope-dev@zope.org',
     description='Message Identifiers for internationalization',
     long_description=(
-        read('README.txt')
+        read('README.rst')
         + '\n\n' +
-        read('CHANGES.txt')
+        read('CHANGES.rst')
         ),
     keywords = "zope i18n message factory",
     classifiers = [
