@@ -54,7 +54,7 @@ static PyObject *
 Message_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
   static char *kwlist[] = {"value", "domain", "default", "mapping", NULL};
-  PyObject *value, *domain=NULL, *default_=NULL, *mapping=NULL, *s;
+  PyObject *value, *domain=NULL, *default_=NULL, *mapping=NULL, *s, *newfunc, *newargs;
   Message *self;
 
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "O|OOO", kwlist, 
@@ -65,8 +65,16 @@ Message_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
   if (args == NULL)
     return NULL;
 
-  s = PyUnicode_Type.tp_new(type, args, NULL); 
-  Py_DECREF(args);
+  s = 
+  new_func = PyObject_GetAttrString((PyObject *)&PyUnicode_Type, "__new__");
+  Py_INCREF(new_func);
+  new_args = PyTuple_New(3);
+  Py_INCREF(new_args);
+  PyObject_CallMethod(PyUnicode_Type, "__new__", args);
+  //PyTuple_SetItem(new_args, 0, type);
+  //
+  //(type, args, NULL); 
+  //Py_DECREF(args);
   if (s == NULL)
     return NULL;
 
