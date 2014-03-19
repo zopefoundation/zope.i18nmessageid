@@ -2,6 +2,10 @@
 CHANGES
 =======
 
+4.0.4 (unreleased)
+------------------
+
+- TBD
 
 4.0.3 (2014-03-19)
 ------------------
@@ -9,7 +13,6 @@ CHANGES
 - Added support for Python 3.4.
 
 - Updated ``boostrap.py`` to version 2.2.
-
 
 4.0.2 (2012-12-31)
 ------------------
