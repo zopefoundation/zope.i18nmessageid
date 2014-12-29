@@ -1,3 +1,9 @@
+``zope.i18nmessageid``
+======================
+
+.. image:: https://travis-ci.org/zopefoundation/zope.i18nmessageid.png?branch=master
+        :target: https://travis-ci.org/zopefoundation/zope.i18nmessageid
+
 To translate any text, we must be able to discover the source domain
 of the text.  A source domain is an identifier that identifies a
 project that produces program source strings.  Source strings occur as
