@@ -260,7 +260,7 @@ including building the docs and testing their snippets:
 
 
 Contributing to :mod:`zope.i18nmessageid`
-#################################
+#########################################
 
 Submitting a Bug Report
 -----------------------
