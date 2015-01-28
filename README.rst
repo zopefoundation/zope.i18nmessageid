@@ -1,8 +1,16 @@
 ``zope.i18nmessageid``
 ======================
 
+.. image:: https://pypip.in/version/zope.i18nmessageid/badge.svg?style=flat
+    :target: https://pypi.python.org/pypi/zope.i18nmessageid/
+    :alt: Latest Version
+
 .. image:: https://travis-ci.org/zopefoundation/zope.i18nmessageid.png?branch=master
         :target: https://travis-ci.org/zopefoundation/zope.i18nmessageid
+
+.. image:: https://readthedocs.org/projects/zopei18nmessageid/badge/?version=latest
+        :target: http://zopei18nmessageid.readthedocs.org/en/latest/
+        :alt: Documentation Status
 
 To translate any text, we must be able to discover the source domain
 of the text.  A source domain is an identifier that identifies a
