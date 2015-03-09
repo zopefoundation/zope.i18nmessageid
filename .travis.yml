@@ -8,8 +8,8 @@ python:
     - 3.4
     - pypy
 install:
-    - pip install . --use-mirrors
+    - pip install .
 script:
-    - python setup.py test -q
+    - python setup.py -q test -q
 notifications:
     email: false
