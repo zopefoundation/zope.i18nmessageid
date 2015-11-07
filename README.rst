@@ -1,7 +1,7 @@
 ``zope.i18nmessageid``
 ======================
 
-.. image:: https://pypip.in/version/zope.i18nmessageid/badge.svg?style=flat
+.. image:: https://img.shields.io/pypi/v/zope.i18nmessageid.svg
     :target: https://pypi.python.org/pypi/zope.i18nmessageid/
     :alt: Latest Version
 
