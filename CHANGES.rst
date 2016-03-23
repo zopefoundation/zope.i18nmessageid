@@ -13,7 +13,7 @@ Changes
 
 - Add support for Python 3.4.
 
-- Updateboostrap.py`` to version 2.2.
+- Update ``boostrap.py`` to version 2.2.
 
 4.0.2 (2012-12-31)
 ------------------
@@ -28,9 +28,9 @@ Changes
 4.0.0 (2012-05-16)
 ------------------
 
-- Automate of Sphinx HTML docs and running doctest snippets via tox.
+- Automate generation of Sphinx HTML docs and running doctest snippets via tox.
 
-- Remove of '2to3' and associated fixers when installing under Py3k.
+- Remove use of '2to3' and associated fixers when installing under Py3k.
   The code is now in a "compatible subset" which supports Python 2.6, 2.7,
   and 3.2, including PyPy 1.8 (the version compatible with the 2.7 language
   spec).
@@ -81,7 +81,7 @@ Changes
 3.5.2 (2010-04-30)
 ------------------
 
-- Remove of 'zope.testing.doctestunit' in favor of stdlib's 'doctest.
+- Remove use of 'zope.testing.doctestunit' in favor of stdlib's 'doctest.
 
 3.5.1 (2010-04-10)
 ------------------
@@ -98,7 +98,7 @@ Changes
 
 - Add support to bootstrap on Jython.
 
-- Change's mailing list address from zope3-dev at zope.org to
+- Change package's mailing list address from zope3-dev at zope.org to
   zope-dev at zope.org, because zope3-dev is now retired.
 
 - Reformat change log to common formatting style.
