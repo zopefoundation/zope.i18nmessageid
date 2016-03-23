@@ -1,50 +1,52 @@
 Changes
 =======
 
-4.0.4 (unreleased)
+4.1.0 (unreleased)
 ------------------
 
-- Claim support for Python 3.5.
+- Drop support for Python 2.6 and 3.2.
+
+- Add support for Python 3.5.
 
 4.0.3 (2014-03-19)
 ------------------
 
-- Added support for Python 3.4.
+- Add support for Python 3.4.
 
-- Updated ``boostrap.py`` to version 2.2.
+- Updateboostrap.py`` to version 2.2.
 
 4.0.2 (2012-12-31)
 ------------------
 
-- Fleshed out PyPI Trove classifiers.
+- Flesh out PyPI Trove classifiers.
 
 4.0.1 (2012-11-21)
 ------------------
 
-- Added support for Python 3.3.
+- Add support for Python 3.3.
 
 4.0.0 (2012-05-16)
 ------------------
 
-- Automated build of Sphinx HTML docs and running doctest snippets via tox.
+- Automate of Sphinx HTML docs and running doctest snippets via tox.
 
-- Removed use of '2to3' and associated fixers when installing under Py3k.
+- Remove of '2to3' and associated fixers when installing under Py3k.
   The code is now in a "compatible subset" which supports Python 2.6, 2.7,
   and 3.2, including PyPy 1.8 (the version compatible with the 2.7 language
   spec).
 
-- 100% unit test coverage.
+- Bring unit test coverage to 100%.
 
 - Move doctest examples into Sphinx documentation.
 
-- Dropped explicit support for Python 2.4 / 2.5 / 3.1.
+- Drop explicit support for Python 2.4 / 2.5 / 3.1.
 
-- Added explicit support for PyPy.
+- Add explicit support for PyPy.
 
-- Added 'setup.py dev' alias (runs ``setup.py develop`` plus installs
+- Add 'setup.py dev' alias (runs ``setup.py develop`` plus installs
   ``nose`` and ``coverage``).
 
-- Added 'setup.py docs' alias (installs ``Sphinx`` and dependencies).
+- Add 'setup.py docs' alias (installs ``Sphinx`` and dependencies).
 
 
 3.6.1 (2011-07-20)
@@ -57,7 +59,7 @@ Changes
 
 - Python 3 support.
 
-- Don't attempt to compile C extensions on PyPy or Jython.
+- Suppress compiling C extensions on PyPy or Jython.
 
 - Add a tox.ini (see http://tox.readthedocs.org/en/latest/) for easier
   automated testing.
@@ -65,7 +67,7 @@ Changes
 3.5.3 (2010-08-10)
 ------------------
 
-- Made compilation of C extension optional again; 3.5.1 broke this
+- Make compilation of C extension optional again; 3.5.1 broke this
   inasmuch as this package become unusable on non-CPython platforms.
   Making the compilation of the C extension optional again implied
   removing ``setup.py`` code added in 3.5.1 which made the C extension
@@ -79,27 +81,27 @@ Changes
 3.5.2 (2010-04-30)
 ------------------
 
-- Removed use of 'zope.testing.doctestunit' in favor of stdlib's 'doctest.
+- Remove of 'zope.testing.doctestunit' in favor of stdlib's 'doctest.
 
 3.5.1 (2010-04-10)
 ------------------
 
 - LP #257657 / 489529:  Fix memory leak in C extension.
 
-- Fixed the compilation of the C extension with python 2.6: refactored it as a
+- Fix the compilation of the C extension with python 2.6: refactored it as a
   setuptools Feature.
 
 3.5.0 (2009-06-27)
 ------------------
 
-- Made compilation of C extension optional.
+- Make compilation of C extension optional.
 
-- Added support to bootstrap on Jython.
+- Add support to bootstrap on Jython.
 
-- Changed package's mailing list address from zope3-dev at zope.org to
+- Change's mailing list address from zope3-dev at zope.org to
   zope-dev at zope.org, because zope3-dev is now retired.
 
-- Reformatted change log to common formatting style.
+- Reformat change log to common formatting style.
 
 - Update package description and docs a little.
 
@@ -113,7 +115,7 @@ Changes
 3.4.2 (2007-09-25)
 ------------------
 
-- Moved the ``ZopeMessageFactory`` from ``zope.app.i18n`` to this package.
+- Move the ``ZopeMessageFactory`` from ``zope.app.i18n`` to this package.
 
 3.4.0 (2007-07-19)
 ------------------
@@ -128,9 +130,9 @@ Changes
 - Corresponds to the verison of the zope.i18nmessageid package shipped as
   part of the Zope 3.2.0 release.
 
-- Implemented 'zope.i18nmessageid.message' as a C extension.
+- Implement 'zope.i18nmessageid.message' as a C extension.
 
-- Deprecated 'zope.i18nmessageid.messageid' APIs ('MessageID',
+- Deprecate 'zope.i18nmessageid.messageid' APIs ('MessageID',
   'MessageIDFactory') in favor of replacements in 'zope.i18nmessageid.message'
   ('Message', 'MessageFactory').  Deprecated items are scheduled for removal
   in Zope 3.3.
