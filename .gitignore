@@ -13,3 +13,4 @@ docs/_build
 nosetests.xml
 coverage.xml
 .coverage
+htmlcov/

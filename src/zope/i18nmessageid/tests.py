@@ -13,15 +13,17 @@
 ##############################################################################
 """Message ID tests.
 """
+import sys
 import unittest
+
+from zope.i18nmessageid import message as messageid
 
 class PyMessageTests(unittest.TestCase):
 
     _TEST_REAOONLY = True
 
     def _getTargetClass(self):
-        from zope.i18nmessageid.message import pyMessage
-        return pyMessage
+        return messageid.pyMessage
 
     def _makeOne(self, *args, **kw):
         return self._getTargetClass()(*args, **kw)
@@ -71,20 +73,23 @@ class PyMessageTests(unittest.TestCase):
         message = self._makeOne('testing')
         def _try():
             message.domain = 'domain'
-        self.assertRaises(TypeError, _try)
+        # C version raises AttributeError, Python version TypeError
+        self.assertRaises((TypeError, AttributeError), _try)
 
     def test_default_immutable(self):
         message = self._makeOne('testing')
         def _try():
             message.default = 'default'
-        self.assertRaises(TypeError, _try)
+        # C version raises AttributeError, Python version TypeError
+        self.assertRaises((TypeError, AttributeError), _try)
 
     def test_mapping_immutable(self):
         mapping = {'key': 'value'}
         message = self._makeOne('testing')
         def _try():
             message.mapping = mapping
-        self.assertRaises(TypeError, _try)
+        # C version raises AttributeError, Python version TypeError
+        self.assertRaises((TypeError, AttributeError), _try)
 
     def test_unknown_immutable(self):
         message = self._makeOne('testing')
@@ -101,15 +106,25 @@ class PyMessageTests(unittest.TestCase):
         self.assertTrue(klass is self._getTargetClass())
         self.assertEqual(state, ('testing', 'domain', 'default', mapping))
 
+    def test_non_unicode_default(self):
+        message = self._makeOne(u'str', default=123)
+        self.assertEqual(message.default, 123)
 
+@unittest.skipIf(messageid.Message is messageid.pyMessage,
+                 "Duplicate tests")
 class MessageTests(PyMessageTests):
 
     _TEST_REAOONLY = False
 
     def _getTargetClass(self):
-        from zope.i18nmessageid.message import Message
-        return Message
+        return messageid.Message
 
+@unittest.skipIf('java' in sys.platform or hasattr(sys, 'pypy_version_info'),
+                 "We don't expect the C implementation here")
+class OptimizationTests(unittest.TestCase):
+
+    def test_optimizations_available(self):
+        self.assertIsNot(messageid.Message, messageid.pyMessage)
 
 class MessageFactoryTests(unittest.TestCase):
 
@@ -144,7 +159,5 @@ class MessageFactoryTests(unittest.TestCase):
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(PyMessageTests),
-        unittest.makeSuite(MessageTests),
-        unittest.makeSuite(MessageFactoryTests),
+        unittest.defaultTestLoader.loadTestsFromName(__name__),
     ))

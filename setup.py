@@ -65,7 +65,7 @@ class optional_build_ext(build_ext):
     def run(self):
         try:
             build_ext.run(self)
-        
+
         except DistutilsPlatformError:
             # The sys.exc_info()[1] is to preserve compatibility with both
             # Python 2.5 and 3.x, which is needed in setup.py.
@@ -74,7 +74,7 @@ class optional_build_ext(build_ext):
     def build_extension(self, ext):
         try:
             build_ext.build_extension(self, ext)
-        
+
         except (CCompilerError, DistutilsExecError):
             # The sys.exc_info()[1] is to preserve compatibility with both
             # Python 2.5 and 3.x, which is needed in setup.py.
@@ -89,13 +89,13 @@ class optional_build_ext(build_ext):
         An optional code optimization (C extension) could not be compiled.
 
         Optimizations for this package will not be available!
-        
+
         """)
         sys.stderr.write(str(e) + '\n')
         sys.stderr.write('*' * 80 + '\n')
 
 setup(name='zope.i18nmessageid',
-    version = '4.1.0.dev0',
+    version='4.1.0.dev0',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
     description='Message Identifiers for internationalization',
@@ -104,8 +104,8 @@ setup(name='zope.i18nmessageid',
         + '\n\n' +
         read('CHANGES.rst')
         ),
-    keywords = "zope i18n message factory",
-    classifiers = [
+    keywords="zope i18n message factory",
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
@@ -117,22 +117,23 @@ setup(name='zope.i18nmessageid',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Topic :: Internet :: WWW/HTTP',
-        'Framework :: Zope3'],
+        'Framework :: Zope3',
+    ],
     license='ZPL 2.1',
     url='http://pypi.python.org/pypi/zope.i18nmessageid',
     packages=find_packages('src'),
-    package_dir = {'': 'src'},
+    package_dir={'': 'src'},
     namespace_packages=['zope',],
     install_requires=['setuptools'],
-    include_package_data = True,
+    include_package_data=True,
     test_suite='zope.i18nmessageid.tests.test_suite',
-    zip_safe = False,
-    cmdclass = {'build_ext':optional_build_ext},
+    zip_safe=False,
+    cmdclass={'build_ext':optional_build_ext},
     **extra
 )
-

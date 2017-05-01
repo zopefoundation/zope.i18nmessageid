@@ -41,11 +41,7 @@ class Message(unicode):
             mapping = ustr.mapping and ustr.mapping.copy() or mapping
             ustr = unicode(ustr)
         self.domain = domain
-        if default is None:
-            # MessageID does: self.default = ustr
-            self.default = default
-        else:
-            self.default = unicode(default)
+        self.default = default
         self.mapping = mapping
         self._readonly = True
         return self
@@ -70,7 +66,7 @@ class Message(unicode):
 pyMessage = Message
 
 try:
-    from _zope_i18nmessageid_message import Message
+    from ._zope_i18nmessageid_message import Message
 except ImportError: # pragma: no cover
     pass
 

@@ -6,7 +6,15 @@ Changes
 
 - Drop support for Python 2.6 and 3.2.
 
-- Add support for Python 3.5.
+- Add support for Python 3.5 and 3.6.
+
+- Fix the C extension not being used in Python 3. See `issue 4
+  <https://github.com/zopefoundation/zope.i18nmessageid/issues/4>`_.
+
+- Make the Python implementation of Message accept any object for the
+  ``default`` argument, just as the C extension does. This should be a
+  unicode or byte string. See `issue 5
+  <https://github.com/zopefoundation/zope.i18nmessageid/issues/5>`_.
 
 4.0.3 (2014-03-19)
 ------------------
