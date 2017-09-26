@@ -156,6 +156,7 @@ Message_clear(Message *self)
 static void
 Message_dealloc(Message *self)
 {
+  PyObject_GC_UnTrack((PyObject *)self);
   Message_clear(self);
   PyUnicode_Type.tp_dealloc((PyObject*)self);
 }
