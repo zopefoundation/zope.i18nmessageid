@@ -4,7 +4,8 @@ Changes
 4.1.1 (unreleased)
 ------------------
 
-- TBD
+- Fix the possibility of a rare crash in the C extension when deallocating items. See 
+  https://github.com/zopefoundation/zope.i18nmessageid/issues/7
 
 4.1.0 (2017-05-02)
 ------------------
