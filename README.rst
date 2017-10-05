@@ -5,7 +5,7 @@
     :target: https://pypi.python.org/pypi/zope.i18nmessageid/
     :alt: Latest Version
 
-.. image:: https://travis-ci.org/zopefoundation/zope.i18nmessageid.png?branch=master
+.. image:: https://travis-ci.org/zopefoundation/zope.i18nmessageid.svg?branch=master
         :target: https://travis-ci.org/zopefoundation/zope.i18nmessageid
 
 .. image:: https://readthedocs.org/projects/zopei18nmessageid/badge/?version=latest
