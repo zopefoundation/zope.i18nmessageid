@@ -37,26 +37,29 @@ codeoptimization_c = os.path.join('src', 'zope', 'i18nmessageid',
                                   "_zope_i18nmessageid_message.c")
 codeoptimization = Feature(
     "Optional code optimizations",
-    standard = True,
-    ext_modules = [Extension(
+    standard=True,
+    ext_modules=[Extension(
         "zope.i18nmessageid._zope_i18nmessageid_message",
         [os.path.normcase(codeoptimization_c)]
         )])
 
 extra = {
-    'extras_require': {'testing': ['nose', 'coverage'],
-                       'docs': ['Sphinx'],
-                      },
+    'extras_require': {
+        'testing': ['nose', 'coverage'],
+        'docs': ['Sphinx'],
+    },
 }
 
 if not is_pypy and not is_jython:
     # Jython cannot build the C optimizations, while on PyPy they are
     # anti-optimizations (the C extension compatibility layer is known-slow,
     # and defeats JIT opportunities).
-    extra['features'] = {'codeoptimization':codeoptimization}
+    extra['features'] = {'codeoptimization': codeoptimization}
+
 
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+
 
 class optional_build_ext(build_ext):
     """This class subclasses build_ext and allows
@@ -94,7 +97,9 @@ class optional_build_ext(build_ext):
         sys.stderr.write(str(e) + '\n')
         sys.stderr.write('*' * 80 + '\n')
 
-setup(name='zope.i18nmessageid',
+
+setup(
+    name='zope.i18nmessageid',
     version='4.1.1.dev0',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
@@ -118,6 +123,7 @@ setup(name='zope.i18nmessageid',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         'Natural Language :: English',
@@ -129,11 +135,11 @@ setup(name='zope.i18nmessageid',
     url='http://pypi.python.org/pypi/zope.i18nmessageid',
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    namespace_packages=['zope',],
+    namespace_packages=['zope'],
     install_requires=['setuptools'],
     include_package_data=True,
     test_suite='zope.i18nmessageid.tests.test_suite',
     zip_safe=False,
-    cmdclass={'build_ext':optional_build_ext},
+    cmdclass={'build_ext': optional_build_ext},
     **extra
 )
