@@ -1,11 +1,16 @@
 Changes
 =======
 
-4.1.1 (unreleased)
+4.2.0 (unreleased)
 ------------------
 
 - Fix the possibility of a rare crash in the C extension when deallocating items. See 
   https://github.com/zopefoundation/zope.i18nmessageid/issues/7
+
+- Drop support for Python 3.3.
+
+- Add support for Python 3.7.
+
 
 4.1.0 (2017-05-02)
 ------------------
