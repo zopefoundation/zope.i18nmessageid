@@ -13,7 +13,6 @@
 ##############################################################################
 """Message ID tests.
 """
-import sys
 import unittest
 from zope.i18nmessageid import message as messageid
 
@@ -138,7 +137,6 @@ class MessageTests(unittest.TestCase):
 class MessageFactoryTests(unittest.TestCase):
 
     def _getTargetClass(self):
-        from zope.i18nmessageid.message import MessageFactory
         return messageid.MessageFactory
 
     def _makeOne(self, *args, **kw):
