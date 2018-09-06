@@ -1,6 +1,15 @@
 Changes
 =======
 
+4.3.0-md (merge me ?)
+---------------------
+
+- Remove the C extension completely.
+
+- Added plural variables to the Message and adapted the MessageFactory
+  accordingly.
+
+
 4.2.0 (unreleased)
 ------------------
 
