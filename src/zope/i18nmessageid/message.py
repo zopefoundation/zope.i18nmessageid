@@ -55,7 +55,7 @@ class Message(unicode):
         self.default = default
         self.mapping = mapping
         self.msgid_plural = msgid_plural
-        self.default_plural = default_plural
+        self.default_plural = default_plural or msgid_plural
 
         if number is not None and not isinstance(number, (int, float)):
             # Number must be an integer
