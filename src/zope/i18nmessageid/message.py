@@ -31,18 +31,37 @@ class Message(unicode):
     message id itself implicitly serves as the default text.
     """
 
-    __slots__ = ('domain', 'default', 'mapping', '_readonly')
+    __slots__ = (
+        'domain', 'default', 'mapping', '_readonly',
+        'msgid_plural', 'default_plural', 'number'
+    )
 
-    def __new__(cls, ustr, domain=None, default=None, mapping=None):
+    def __new__(cls, ustr, domain=None, default=None, mapping=None,
+                msgid_plural=None, default_plural=None, number=None):
         self = unicode.__new__(cls, ustr)
         if isinstance(ustr, self.__class__):
             domain = ustr.domain and ustr.domain[:] or domain
             default = ustr.default and ustr.default[:] or default
             mapping = ustr.mapping and ustr.mapping.copy() or mapping
+            msgid_plural = (
+                ustr.msgid_plural and ustr.msgid_plural[:] or msgid_plural)
+            default_plural = (
+                ustr.default_plural and ustr.default_plural[:]
+                or default_plural)
+            number = ustr.number is not None and ustr.number or number
             ustr = unicode(ustr)
+
         self.domain = domain
         self.default = default
         self.mapping = mapping
+        self.msgid_plural = msgid_plural
+        self.default_plural = default_plural or msgid_plural
+
+        if number is not None and not isinstance(number, (int, float)):
+            # Number must be an integer
+            raise TypeError('`number` should be an integer or a float.')
+
+        self.number = number
         self._readonly = True
         return self
 
@@ -57,18 +76,13 @@ class Message(unicode):
             return unicode.__setattr__(self, key, value)
 
     def __getstate__(self):
-        return unicode(self), self.domain, self.default, self.mapping
+        return (
+            unicode(self), self.domain, self.default, self.mapping,
+            self.msgid_plural, self.default_plural, self.number)
 
     def __reduce__(self):
         return self.__class__, self.__getstate__()
 
-# Name the fallback Python implementation to make it easier to test.
-pyMessage = Message
-
-try:
-    from ._zope_i18nmessageid_message import Message
-except ImportError: # pragma: no cover
-    pass
 
 class MessageFactory(object):
     """Factory for creating i18n messages."""
@@ -76,5 +90,7 @@ class MessageFactory(object):
     def __init__(self, domain):
         self._domain = domain
 
-    def __call__(self, ustr, default=None, mapping=None):
-        return Message(ustr, self._domain, default, mapping)
+    def __call__(self, ustr, default=None, mapping=None,
+                 msgid_plural=None, default_plural=None, number=None):
+        return Message(ustr, self._domain, default, mapping,
+                       msgid_plural, default_plural, number)

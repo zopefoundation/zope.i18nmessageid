@@ -4,13 +4,19 @@ Changes
 4.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Remove the C extension completely as it does not provide extra speed
+  or features compared to the Python version.
+
+- Add attributes to support pluralization on a Message and update the
+  MessageFactory accordingly.
 
 
 4.2 (2018-10-05)
 ----------------
 
-- Fix the possibility of a rare crash in the C extension when deallocating items. See `#7 <https://github.com/zopefoundation/zope.i18nmessageid/issues/7>`_.
+- Fix the possibility of a rare crash in the C extension when
+  deallocating items. See `#7
+  <https://github.com/zopefoundation/zope.i18nmessageid/issues/7>`_.
 
 - Drop support for Python 3.3.
 
