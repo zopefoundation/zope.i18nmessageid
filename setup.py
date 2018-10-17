@@ -30,7 +30,7 @@ def read(*rnames):
 
 setup(
     name='zope.i18nmessageid',
-    version='4.2.0.dev0',
+    version='4.3.dev0',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
     description='Message Identifiers for internationalization',
