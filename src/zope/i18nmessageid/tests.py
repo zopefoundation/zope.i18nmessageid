@@ -70,6 +70,21 @@ class PyMessageTests(unittest.TestCase):
         if self._TEST_READONLY:
             self.assertTrue(message._readonly)
 
+    def test_values_with_zero(self):
+        mapping = {'key': 'value'}
+        message = self._makeOne(
+            'testing', 'domain', 'default', mapping,
+            msgid_plural='testings', default_plural="defaults", number=0)
+        self.assertEqual(message, 'testing')
+        self.assertEqual(message.domain, 'domain')
+        self.assertEqual(message.default, 'default')
+        self.assertEqual(message.mapping, mapping)
+        self.assertEqual(message.msgid_plural, 'testings')
+        self.assertEqual(message.default_plural, 'defaults')
+        self.assertEqual(message.number, 0)
+        if self._TEST_READONLY:
+            self.assertTrue(message._readonly)
+
     def test_copy(self):
         mapping = {'key': 'value'}
         source = self._makeOne(

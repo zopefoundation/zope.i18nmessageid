@@ -36,15 +36,16 @@ class Message(six.text_type):
                 msgid_plural=None, default_plural=None, number=None):
         self = six.text_type.__new__(cls, ustr)
         if isinstance(ustr, self.__class__):
-            domain = ustr.domain and ustr.domain[:] or domain
-            default = ustr.default and ustr.default[:] or default
-            mapping = ustr.mapping and ustr.mapping.copy() or mapping
+            domain = domain if ustr.domain is None else ustr.domain[:]
+            default = default if ustr.default is None else ustr.default[:]
+            mapping = mapping if ustr.mapping is None else ustr.mapping.copy()
             msgid_plural = (
-                ustr.msgid_plural and ustr.msgid_plural[:] or msgid_plural)
+                msgid_plural if ustr.msgid_plural is None else
+                ustr.msgid_plural[:])
             default_plural = (
-                ustr.default_plural and ustr.default_plural[:]
-                or default_plural)
-            number = ustr.number is not None and ustr.number or number
+                default_plural if ustr.default_plural is None else
+                ustr.default_plural[:])
+            number = number if ustr.number is None else ustr.number
             ustr = six.text_type(ustr)
 
         self.domain = domain
@@ -55,7 +56,6 @@ class Message(six.text_type):
 
         if number is not None and not isinstance(
                 number, six.integer_types + (float,)):
-            # Number must be an integer
             raise TypeError('`number` should be an integer or a float')
 
         self.number = number
