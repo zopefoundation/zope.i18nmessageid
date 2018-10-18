@@ -14,6 +14,7 @@
 """I18n Messages and factories.
 """
 __docformat__ = "reStructuredText"
+_marker = object()
 
 import six
 
@@ -32,21 +33,29 @@ class Message(six.text_type):
         'domain', 'default', 'mapping', '_readonly',
         'msgid_plural', 'default_plural', 'number')
 
-    def __new__(cls, ustr, domain=None, default=None, mapping=None,
-                msgid_plural=None, default_plural=None, number=None):
+    def __new__(cls, ustr, domain=_marker, default=_marker, mapping=_marker,
+                msgid_plural=_marker, default_plural=_marker, number=_marker):
         self = six.text_type.__new__(cls, ustr)
         if isinstance(ustr, self.__class__):
-            domain = domain if ustr.domain is None else ustr.domain[:]
-            default = default if ustr.default is None else ustr.default[:]
-            mapping = mapping if ustr.mapping is None else ustr.mapping.copy()
+            domain = ustr.domain[:] if domain is _marker else domain
+            default = ustr.default[:] if default is _marker else default
+            mapping = ustr.mapping.copy() if mapping is _marker else mapping
             msgid_plural = (
-                msgid_plural if ustr.msgid_plural is None else
-                ustr.msgid_plural[:])
+                ustr.msgid_plural[:] if msgid_plural is _marker else
+                msgid_plural)
             default_plural = (
-                default_plural if ustr.default_plural is None else
-                ustr.default_plural[:])
-            number = number if ustr.number is None else ustr.number
+                ustr.default_plural[:] if default_plural is _marker else
+                default_plural)
+            number = ustr.number if number is _marker else number
             ustr = six.text_type(ustr)
+        else:
+            domain = None if domain is _marker else domain
+            default = None if default is _marker else default
+            mapping = None if mapping is _marker else mapping
+            msgid_plural = None if msgid_plural is _marker else msgid_plural
+            default_plural = (None if default_plural is _marker else
+                              default_plural)
+            number = None if number is _marker else number
 
         self.domain = domain
         self.default = default

@@ -118,17 +118,18 @@ class PyMessageTests(unittest.TestCase):
 
     def test_copy_with_overrides(self):
         mapping = {'key': 'value'}
-        source = self._makeOne('testing')
+        source = self._makeOne(
+            'testing', 'domain', default='other', mapping=mapping,
+            msgid_plural='workings', default_plural='others', number=3)
         message = self._makeOne(
-            source, 'domain', 'default', mapping,
-            msgid_plural='testings', default_plural="defaults", number=2)
+            source, mapping=None, msgid_plural='override', number=0)
         self.assertEqual(message, 'testing')
         self.assertEqual(message.domain, 'domain')
-        self.assertEqual(message.default, 'default')
-        self.assertEqual(message.mapping, mapping)
-        self.assertEqual(message.msgid_plural, 'testings')
-        self.assertEqual(message.default_plural, 'defaults')
-        self.assertEqual(message.number, 2)
+        self.assertEqual(message.default, 'other')
+        self.assertEqual(message.mapping, None)
+        self.assertEqual(message.msgid_plural, 'override')
+        self.assertEqual(message.default_plural, 'others')
+        self.assertEqual(message.number, 0)
         if self._TEST_READONLY:
             self.assertTrue(message._readonly)
 
