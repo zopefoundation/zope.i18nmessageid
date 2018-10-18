@@ -22,7 +22,7 @@
 
 #ifndef PyVarObject_HEAD_INIT
     #define PyVarObject_HEAD_INIT(type, size) \
-	PyObject_HEAD_INIT(type) size,
+    PyObject_HEAD_INIT(type) size,
 #endif
 
 #if PY_MAJOR_VERSION >= 3
@@ -35,24 +35,24 @@
    Python 2.4 and borrowed from there */
 
 #ifndef Py_CLEAR
-#define Py_CLEAR(op)				\
-  do {						\
-    if (op) {					\
-      PyObject *tmp = (op);			\
-      (op) = NULL;				\
-      Py_DECREF(tmp);				\
-    }						\
+#define Py_CLEAR(op)                \
+  do {                              \
+    if (op) {                       \
+      PyObject *tmp = (op);         \
+      (op) = NULL;                  \
+      Py_DECREF(tmp);               \
+    }                               \
   } while (0)
 #endif
 
 #ifndef Py_VISIT
-#define Py_VISIT(op)					\
-  do {							\
-    if (op) {						\
-      int vret = visit((op), arg);			\
-      if (vret)						\
-	return vret;					\
-    }							\
+#define Py_VISIT(op)                \
+  do {                              \
+    if (op) {                       \
+      int vret = visit((op), arg);  \
+      if (vret)                     \
+    return vret;                    \
+    }                               \
   } while (0)
 #endif
 
@@ -171,7 +171,7 @@ static PyMemberDef Message_members[] = {
   { "msgid_plural", T_OBJECT, offsetof(Message, value_plural), READONLY },
   { "default_plural", T_OBJECT, offsetof(Message, default_plural), READONLY },
   { "number", T_OBJECT, offsetof(Message, number), READONLY },
-  {NULL}	/* Sentinel */
+  {NULL}    /* Sentinel */
 };
 
 static int
@@ -214,13 +214,13 @@ Message_reduce(Message *self)
   if (value == NULL)
     return NULL;
   result = Py_BuildValue("(O(OOOOOOO))", Py_TYPE(&(self->base)),
-			 value,
-			 self->domain ? self->domain : Py_None,
-			 self->default_ ? self->default_ : Py_None,
-			 self->mapping ? self->mapping : Py_None,
-			 self->value_plural ? self->value_plural : Py_None,
-			 self->default_plural ? self->default_plural : Py_None,
-			 self->number ? self->number : Py_None);
+             value,
+             self->domain ? self->domain : Py_None,
+             self->default_ ? self->default_ : Py_None,
+             self->mapping ? self->mapping : Py_None,
+             self->value_plural ? self->value_plural : Py_None,
+             self->default_plural ? self->default_plural : Py_None,
+             self->number ? self->number : Py_None);
   Py_DECREF(value);
   return result;
 }
@@ -243,49 +243,49 @@ static char MessageType__doc__[] =
 
 static PyTypeObject
 MessageType = {
-	PyVarObject_HEAD_INIT(NULL, 0)
-	/* tp_name           */ "zope.i18nmessageid.message."
+    PyVarObject_HEAD_INIT(NULL, 0)
+    /* tp_name           */ "zope.i18nmessageid.message."
                                 "Message",
-	/* tp_basicsize      */ sizeof(Message),
-	/* tp_itemsize       */ 0,
-	/* tp_dealloc        */ (destructor)&Message_dealloc,
-	/* tp_print          */ (printfunc)0,
-	/* tp_getattr        */ (getattrfunc)0,
-	/* tp_setattr        */ (setattrfunc)0,
-	/* tp_compare        */ 0,
-	/* tp_repr           */ (reprfunc)0,
-	/* tp_as_number      */ 0,
-	/* tp_as_sequence    */ 0,
-	/* tp_as_mapping     */ 0,
-	/* tp_hash           */ (hashfunc)0,
-	/* tp_call           */ (ternaryfunc)0,
-	/* tp_str            */ (reprfunc)0,
-        /* tp_getattro       */ (getattrofunc)0,
-        /* tp_setattro       */ (setattrofunc)0,
-        /* tp_as_buffer      */ 0,
-        /* tp_flags          */ Py_TPFLAGS_DEFAULT
+    /* tp_basicsize      */ sizeof(Message),
+    /* tp_itemsize       */ 0,
+    /* tp_dealloc        */ (destructor)&Message_dealloc,
+    /* tp_print          */ (printfunc)0,
+    /* tp_getattr        */ (getattrfunc)0,
+    /* tp_setattr        */ (setattrfunc)0,
+    /* tp_compare        */ 0,
+    /* tp_repr           */ (reprfunc)0,
+    /* tp_as_number      */ 0,
+    /* tp_as_sequence    */ 0,
+    /* tp_as_mapping     */ 0,
+    /* tp_hash           */ (hashfunc)0,
+    /* tp_call           */ (ternaryfunc)0,
+    /* tp_str            */ (reprfunc)0,
+    /* tp_getattro       */ (getattrofunc)0,
+    /* tp_setattro       */ (setattrofunc)0,
+    /* tp_as_buffer      */ 0,
+    /* tp_flags          */ Py_TPFLAGS_DEFAULT
                             | Py_TPFLAGS_BASETYPE
-                          	| Py_TPFLAGS_HAVE_GC,
-	/* tp_doc            */ MessageType__doc__,
-        /* tp_traverse       */ (traverseproc)Message_traverse,
-        /* tp_clear          */ (inquiry)Message_clear,
-        /* tp_richcompare    */ (richcmpfunc)0,
-        /* tp_weaklistoffset */ (long)0,
-        /* tp_iter           */ (getiterfunc)0,
-        /* tp_iternext       */ (iternextfunc)0,
-        /* tp_methods        */ Message_methods,
-        /* tp_members        */ Message_members,
-        /* tp_getset         */ 0,
-        /* tp_base           */ 0,
-        /* tp_dict           */ 0, /* internal use */
-        /* tp_descr_get      */ (descrgetfunc)0,
-        /* tp_descr_set      */ (descrsetfunc)0,
-        /* tp_dictoffset     */ 0,
-        /* tp_init           */ (initproc)0,
-        /* tp_alloc          */ (allocfunc)0,
-        /* tp_new            */ (newfunc)Message_new,
-	/* tp_free           */ 0, /* Low-level free-mem routine */
-	/* tp_is_gc          */ (inquiry)0, /* For PyObject_IS_GC */
+                            | Py_TPFLAGS_HAVE_GC,
+    /* tp_doc            */ MessageType__doc__,
+    /* tp_traverse       */ (traverseproc)Message_traverse,
+    /* tp_clear          */ (inquiry)Message_clear,
+    /* tp_richcompare    */ (richcmpfunc)0,
+    /* tp_weaklistoffset */ (long)0,
+    /* tp_iter           */ (getiterfunc)0,
+    /* tp_iternext       */ (iternextfunc)0,
+    /* tp_methods        */ Message_methods,
+    /* tp_members        */ Message_members,
+    /* tp_getset         */ 0,
+    /* tp_base           */ 0,
+    /* tp_dict           */ 0, /* internal use */
+    /* tp_descr_get      */ (descrgetfunc)0,
+    /* tp_descr_set      */ (descrsetfunc)0,
+    /* tp_dictoffset     */ 0,
+    /* tp_init           */ (initproc)0,
+    /* tp_alloc          */ (allocfunc)0,
+    /* tp_new            */ (newfunc)Message_new,
+    /* tp_free           */ 0, /* Low-level free-mem routine */
+    /* tp_is_gc          */ (inquiry)0, /* For PyObject_IS_GC */
 };
 
 /* End of code for Message objects */
@@ -317,7 +317,7 @@ static char _zope_i18nmessageid_message_module_documentation[] =
   };
 #endif
 
-#ifndef PyMODINIT_FUNC	/* declarations for DLL import/export */
+#ifndef PyMODINIT_FUNC  /* declarations for DLL import/export */
   #define PyMODINIT_FUNC void
 #endif
 
