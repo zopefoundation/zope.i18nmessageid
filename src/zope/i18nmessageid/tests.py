@@ -104,7 +104,7 @@ class PyMessageTests(unittest.TestCase):
         mapping = {'key': 'value'}
         source = self._makeOne(
             'testing', 'domain', 'default', mapping,
-            msgid_plural='testings', default_plural="defaults", number=2)
+            msgid_plural='testings', default_plural="defaults", number=0)
         message = self._makeOne(source)
         self.assertEqual(message, 'testing')
         self.assertEqual(message.domain, 'domain')
@@ -112,7 +112,7 @@ class PyMessageTests(unittest.TestCase):
         self.assertEqual(message.mapping, mapping)
         self.assertEqual(message.msgid_plural, 'testings')
         self.assertEqual(message.default_plural, 'defaults')
-        self.assertEqual(message.number, 2)
+        self.assertEqual(message.number, 0)
         if self._TEST_READONLY:
             self.assertTrue(message._readonly)
 
