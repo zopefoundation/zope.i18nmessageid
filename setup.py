@@ -58,7 +58,8 @@ if not is_pypy and not is_jython:
 
 
 def read(*rnames):
-    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+    with open(os.path.join(os.path.dirname(__file__), *rnames)) as stream:
+        return stream.read()
 
 
 class optional_build_ext(build_ext):
@@ -135,7 +136,7 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
     namespace_packages=['zope'],
-    install_requires=['setuptools'],
+    install_requires=['setuptools', 'six'],
     include_package_data=True,
     test_suite='zope.i18nmessageid.tests.test_suite',
     zip_safe=False,

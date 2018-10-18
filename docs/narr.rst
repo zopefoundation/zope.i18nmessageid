@@ -54,7 +54,7 @@ exports an already-created factory for that domain:
   >>> foo = _z_('foo')
   >>> foo.domain
   'zope'
-  
+
 
 Example Usage
 -------------
@@ -135,14 +135,17 @@ Last but not least, messages are reduceable for pickling:
   >>> args == (u'robot-message',
   ...          'futurama',
   ...          u'${name} is a robot.',
-  ...          {u'name': u'Bender'})
+  ...          {u'name': u'Bender'},
+  ...          None,
+  ...          None,
+  ...          None)
   True
 
   >>> fembot = Message(u'fembot')
   >>> callable, args = fembot.__reduce__()
   >>> callable is Message
   True
-  >>> args == (u'fembot', None, None, None)
+  >>> args == (u'fembot', None, None, None, None, None, None)
   True
 
 Pickling and unpickling works, which means we can store message IDs in
