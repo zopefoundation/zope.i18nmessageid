@@ -1,7 +1,7 @@
 Changes
 =======
 
-4.3 (unreleased)
+4.3 (2018-10-18)
 ----------------
 
 - Add attributes to support pluralization on a Message and update the
