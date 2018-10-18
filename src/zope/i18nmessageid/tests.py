@@ -28,7 +28,7 @@ class PyMessageTests(unittest.TestCase):
     def _makeOne(self, *args, **kw):
         return self._getTargetClass()(*args, **kw)
 
-    def test_ctor_defaults(self):
+    def test_defaults(self):
         message = self._makeOne('testing')
         self.assertEqual(message, 'testing')
         self.assertEqual(message.domain, None)
@@ -40,7 +40,7 @@ class PyMessageTests(unittest.TestCase):
         if self._TEST_READONLY:
             self.assertTrue(message._readonly)
 
-    def test_ctor_explicit(self):
+    def test_values(self):
         mapping = {'key': 'value'}
         message = self._makeOne(
             'testing', 'domain', 'default', mapping,
@@ -55,7 +55,22 @@ class PyMessageTests(unittest.TestCase):
         if self._TEST_READONLY:
             self.assertTrue(message._readonly)
 
-    def test_ctor_copy(self):
+    def test_values_with_float_for_number(self):
+        mapping = {'key': 'value'}
+        message = self._makeOne(
+            'testing', 'domain', 'default', mapping,
+            msgid_plural='testings', default_plural="defaults", number=2.2)
+        self.assertEqual(message, 'testing')
+        self.assertEqual(message.domain, 'domain')
+        self.assertEqual(message.default, 'default')
+        self.assertEqual(message.mapping, mapping)
+        self.assertEqual(message.msgid_plural, 'testings')
+        self.assertEqual(message.default_plural, 'defaults')
+        self.assertEqual(message.number, 2.2)
+        if self._TEST_READONLY:
+            self.assertTrue(message._readonly)
+
+    def test_copy(self):
         mapping = {'key': 'value'}
         source = self._makeOne(
             'testing', 'domain', 'default', mapping,
@@ -71,7 +86,7 @@ class PyMessageTests(unittest.TestCase):
         if self._TEST_READONLY:
             self.assertTrue(message._readonly)
 
-    def test_ctor_copy_w_overrides(self):
+    def test_copy_with_overrides(self):
         mapping = {'key': 'value'}
         source = self._makeOne('testing')
         message = self._makeOne(
