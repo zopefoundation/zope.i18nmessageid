@@ -129,7 +129,7 @@ setup(
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Topic :: Internet :: WWW/HTTP',
-        'Framework :: Zope3',
+        'Framework :: Zope :: 3',
     ],
     license='ZPL 2.1',
     url='http://pypi.python.org/pypi/zope.i18nmessageid',
