@@ -1,21 +1,24 @@
-Changes
-=======
+=========
+ Changes
+=========
 
-4.4 (unreleased)
-----------------
+4.3.1 (unreleased)
+==================
 
-- Nothing changed yet.
+- Fix a regression copying Message objects in the Python
+  implementation. See `issue 14
+  <https://github.com/zopefoundation/zope.i18nmessageid/issues/14>`_.
 
 
-4.3 (2018-10-18)
-----------------
+4.3.0 (2018-10-18)
+==================
 
 - Add attributes to support pluralization on a Message and update the
   MessageFactory accordingly.
 
 
-4.2 (2018-10-05)
-----------------
+4.2.0 (2018-10-05)
+==================
 
 - Fix the possibility of a rare crash in the C extension when
   deallocating items. See `issue 7
@@ -27,7 +30,7 @@ Changes
 
 
 4.1.0 (2017-05-02)
-------------------
+==================
 
 - Drop support for Python 2.6 and 3.2.
 
@@ -42,24 +45,24 @@ Changes
   <https://github.com/zopefoundation/zope.i18nmessageid/issues/5>`_.
 
 4.0.3 (2014-03-19)
-------------------
+==================
 
 - Add support for Python 3.4.
 
 - Update ``boostrap.py`` to version 2.2.
 
 4.0.2 (2012-12-31)
-------------------
+==================
 
 - Flesh out PyPI Trove classifiers.
 
 4.0.1 (2012-11-21)
-------------------
+==================
 
 - Add support for Python 3.3.
 
 4.0.0 (2012-05-16)
-------------------
+==================
 
 - Automate generation of Sphinx HTML docs and running doctest snippets via tox.
 
@@ -83,12 +86,12 @@ Changes
 
 
 3.6.1 (2011-07-20)
-------------------
+==================
 
 - Correct metadata in this file for release date.
 
 3.6.0 (2011-07-20)
-------------------
+==================
 
 - Python 3 support.
 
@@ -98,7 +101,7 @@ Changes
   automated testing.
 
 3.5.3 (2010-08-10)
-------------------
+==================
 
 - Make compilation of C extension optional again; 3.5.1 broke this
   inasmuch as this package become unusable on non-CPython platforms.
@@ -112,12 +115,12 @@ Changes
   compiled.  This also makes the tests pass on Jython.
 
 3.5.2 (2010-04-30)
-------------------
+==================
 
 - Remove use of 'zope.testing.doctestunit' in favor of stdlib's 'doctest.
 
 3.5.1 (2010-04-10)
-------------------
+==================
 
 - LP #257657 / 489529:  Fix memory leak in C extension.
 
@@ -125,7 +128,7 @@ Changes
   setuptools Feature.
 
 3.5.0 (2009-06-27)
-------------------
+==================
 
 - Make compilation of C extension optional.
 
@@ -141,24 +144,24 @@ Changes
 - Remove old .cfg files for zpkg.
 
 3.4.3 (2007-09-26)
-------------------
+==================
 
 - Make PyPI the home URL.
 
 3.4.2 (2007-09-25)
-------------------
+==================
 
 - Move the ``ZopeMessageFactory`` from ``zope.app.i18n`` to this package.
 
 3.4.0 (2007-07-19)
-------------------
+==================
 
 - Remove incorrect dependency.
 
 - Create final release to reflect package status.
 
 3.2.0 (2006-01-05)
-------------------
+==================
 
 - Corresponds to the verison of the zope.i18nmessageid package shipped as
   part of the Zope 3.2.0 release.
@@ -171,7 +174,7 @@ Changes
   in Zope 3.3.
 
 3.0.0 (2004-11-07)
-------------------
+==================
 
 - Corresponds to the verison of the zope.i18nmessageid package shipped as
   part of the Zope X3.0.0 release.

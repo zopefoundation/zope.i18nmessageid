@@ -14,49 +14,12 @@
 
 #include "Python.h"
 
-/* Support for Python < 2.6: */
-
-#ifndef Py_TYPE
-  #define Py_TYPE(ob) (((PyObject*)(ob))->ob_type)
-#endif
-
-#ifndef PyVarObject_HEAD_INIT
-    #define PyVarObject_HEAD_INIT(type, size) \
-    PyObject_HEAD_INIT(type) size,
-#endif
 
 #if PY_MAJOR_VERSION >= 3
   #define MOD_ERROR_VAL NULL
 #else
   #define MOD_ERROR_VAL
 #endif
-
-/* these macros make gc support easier; they are only available in
-   Python 2.4 and borrowed from there */
-
-#ifndef Py_CLEAR
-#define Py_CLEAR(op)                \
-  do {                              \
-    if (op) {                       \
-      PyObject *tmp = (op);         \
-      (op) = NULL;                  \
-      Py_DECREF(tmp);               \
-    }                               \
-  } while (0)
-#endif
-
-#ifndef Py_VISIT
-#define Py_VISIT(op)                \
-  do {                              \
-    if (op) {                       \
-      int vret = visit((op), arg);  \
-      if (vret)                     \
-    return vret;                    \
-    }                               \
-  } while (0)
-#endif
-
-/* ----------------------------------------------------- */
 
 typedef struct {
   PyUnicodeObject base;
