@@ -113,6 +113,19 @@ class PyMessageTests(unittest.TestCase):
         self.assertEqual(message.msgid_plural, 'testings')
         self.assertEqual(message.default_plural, 'defaults')
         self.assertEqual(message.number, 0)
+
+        # Besides just being equal, they maintain their identity
+        for attr in (
+                'domain',
+                'default',
+                'mapping',
+                'msgid_plural',
+                'default_plural',
+                'number',
+        ):
+            self.assertIs(getattr(source, attr),
+                          getattr(message, attr))
+
         if self._TEST_READONLY:
             self.assertTrue(message._readonly)
 
@@ -132,6 +145,29 @@ class PyMessageTests(unittest.TestCase):
         self.assertEqual(message.number, 0)
         if self._TEST_READONLY:
             self.assertTrue(message._readonly)
+
+    def test_copy_no_default(self):
+        # https://github.com/zopefoundation/zope.i18nmessageid/issues/14
+        pref_msg = self._makeOne("${name} Preferences")
+        self.assertIsNone(pref_msg.default)
+        copy = self._makeOne(pref_msg, mapping={u'name': u'name'})
+        self.assertIsNone(copy.default)
+
+    def test_copy_no_overrides(self):
+        # https://github.com/zopefoundation/zope.i18nmessageid/issues/14
+        pref_msg = self._makeOne("${name} Preferences")
+
+        copy = self._makeOne(pref_msg)
+        for attr in (
+                'domain',
+                'default',
+                'mapping',
+                'msgid_plural',
+                'default_plural',
+                'number',
+        ):
+            self.assertIsNone(getattr(pref_msg, attr))
+            self.assertIsNone(getattr(copy, attr))
 
     def test_domain_immutable(self):
         message = self._makeOne('testing')

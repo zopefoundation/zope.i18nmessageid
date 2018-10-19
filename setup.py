@@ -101,7 +101,7 @@ class optional_build_ext(build_ext):
 
 setup(
     name='zope.i18nmessageid',
-    version='4.4.dev0',
+    version='4.3.1.dev0',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
     description='Message Identifiers for internationalization',
@@ -132,7 +132,7 @@ setup(
         'Framework :: Zope :: 3',
     ],
     license='ZPL 2.1',
-    url='http://pypi.python.org/pypi/zope.i18nmessageid',
+    url='https://github.com/zopefoundation/zope.i18nmessageid',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     namespace_packages=['zope'],

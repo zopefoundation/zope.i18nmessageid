@@ -13,10 +13,10 @@
 ##############################################################################
 """I18n Messages and factories.
 """
+import six
+
 __docformat__ = "reStructuredText"
 _marker = object()
-
-import six
 
 
 class Message(six.text_type):
@@ -37,37 +37,37 @@ class Message(six.text_type):
                 msgid_plural=_marker, default_plural=_marker, number=_marker):
         self = six.text_type.__new__(cls, ustr)
         if isinstance(ustr, self.__class__):
-            domain = ustr.domain[:] if domain is _marker else domain
-            default = ustr.default[:] if default is _marker else default
-            mapping = ustr.mapping.copy() if mapping is _marker else mapping
-            msgid_plural = (
-                ustr.msgid_plural[:] if msgid_plural is _marker else
-                msgid_plural)
-            default_plural = (
-                ustr.default_plural[:] if default_plural is _marker else
-                default_plural)
-            number = ustr.number if number is _marker else number
-            ustr = six.text_type(ustr)
+            self.domain = ustr.domain
+            self.default = ustr.default
+            self.mapping = ustr.mapping
+            self.msgid_plural = ustr.msgid_plural
+            self.default_plural = ustr.default_plural
+            self.number = ustr.number
         else:
-            domain = None if domain is _marker else domain
-            default = None if default is _marker else default
-            mapping = None if mapping is _marker else mapping
-            msgid_plural = None if msgid_plural is _marker else msgid_plural
-            default_plural = (None if default_plural is _marker else
-                              default_plural)
-            number = None if number is _marker else number
+            self.domain = None
+            self.default = None
+            self.mapping = None
+            self.msgid_plural = None
+            self.default_plural = None
+            self.number = None
 
-        self.domain = domain
-        self.default = default
-        self.mapping = mapping
-        self.msgid_plural = msgid_plural
-        self.default_plural = default_plural
+        if domain is not _marker:
+            self.domain = domain
+        if default is not _marker:
+            self.default = default
+        if mapping is not _marker:
+            self.mapping = mapping
+        if msgid_plural is not _marker:
+            self.msgid_plural = msgid_plural
+        if default_plural is not _marker:
+            self.default_plural = default_plural
+        if number is not _marker:
+            self.number = number
 
-        if number is not None and not isinstance(
-                number, six.integer_types + (float,)):
+        if self.number is not None and not isinstance(
+                self.number, six.integer_types + (float,)):
             raise TypeError('`number` should be an integer or a float')
 
-        self.number = number
         self._readonly = True
         return self
 
