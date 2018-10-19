@@ -2,7 +2,7 @@
  Changes
 =========
 
-4.3.1 (unreleased)
+4.3.1 (2018-10-19)
 ==================
 
 - Fix a regression copying Message objects in the Python
