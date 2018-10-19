@@ -113,6 +113,19 @@ class PyMessageTests(unittest.TestCase):
         self.assertEqual(message.msgid_plural, 'testings')
         self.assertEqual(message.default_plural, 'defaults')
         self.assertEqual(message.number, 0)
+
+        # Besides just being equal, they maintain their identity
+        for attr in (
+                'domain',
+                'default',
+                'mapping',
+                'msgid_plural',
+                'default_plural',
+                'number',
+        ):
+            self.assertIs(getattr(source, attr),
+                          getattr(message, attr))
+
         if self._TEST_READONLY:
             self.assertTrue(message._readonly)
 
@@ -155,7 +168,6 @@ class PyMessageTests(unittest.TestCase):
         ):
             self.assertIsNone(getattr(pref_msg, attr))
             self.assertIsNone(getattr(copy, attr))
-
 
     def test_domain_immutable(self):
         message = self._makeOne('testing')

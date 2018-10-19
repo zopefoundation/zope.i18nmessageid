@@ -37,11 +37,11 @@ class Message(six.text_type):
                 msgid_plural=_marker, default_plural=_marker, number=_marker):
         self = six.text_type.__new__(cls, ustr)
         if isinstance(ustr, self.__class__):
-            self.domain = ustr.domain[:] if ustr.domain else None
-            self.default = ustr.default[:] if ustr.default else None
-            self.mapping = ustr.mapping.copy() if ustr.mapping is not None else None
-            self.msgid_plural = ustr.msgid_plural[:] if ustr.msgid_plural else None
-            self.default_plural = ustr.default_plural[:] if ustr.default_plural else None
+            self.domain = ustr.domain
+            self.default = ustr.default
+            self.mapping = ustr.mapping
+            self.msgid_plural = ustr.msgid_plural
+            self.default_plural = ustr.default_plural
             self.number = ustr.number
         else:
             self.domain = None
