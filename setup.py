@@ -18,6 +18,7 @@
 ##############################################################################
 """Setup for zope.i18nmessageid package
 """
+from __future__ import print_function
 
 import os
 import sys
@@ -43,10 +44,6 @@ codeoptimization = [
     ),
 ]
 
-extra = {
-
-}
-
 ext_modules = []
 if not is_pypy and not is_jython:
     # Jython cannot build the C optimizations, while on PyPy they are
@@ -54,6 +51,11 @@ if not is_pypy and not is_jython:
     # and defeats JIT opportunities).
     ext_modules = codeoptimization
 
+
+tests_require = [
+    'zope.testrunner',
+    'coverage',
+]
 
 def read(*rnames):
     with open(os.path.join(os.path.dirname(__file__), *rnames)) as stream:
@@ -77,18 +79,17 @@ class optional_build_ext(build_ext):
             self._unavailable(e)
 
     def _unavailable(self, e):
-        # Write directly to stderr to preserve compatibility with both
-        # Python 2.5 and 3.x, which is needed in setup.py.
-        sys.stderr.write('*' * 80 + '\n')
-        sys.stderr.write("""WARNING:
+        print('*' * 80, file=sys.stderr)
+        print("""WARNING:
 
         An optional code optimization (C extension) could not be compiled.
 
         Optimizations for this package will not be available!
 
-        """)
-        sys.stderr.write(str(e) + '\n')
-        sys.stderr.write('*' * 80 + '\n')
+        """, file=sys.stderr)
+        print(str(e), file=sys.stderr)
+        print('*' * 80, file=sys.stderr)
+
 
 
 setup(
@@ -134,10 +135,10 @@ setup(
     zip_safe=False,
     cmdclass={'build_ext': optional_build_ext},
     ext_modules=ext_modules,
+    tests_require=tests_require,
     extras_require={
-        'testing': [
-            'nose', 'coverage'
-        ],
+        'testing': tests_require,
+        'test': tests_require,
         'docs': ['Sphinx'],
     },
 )
