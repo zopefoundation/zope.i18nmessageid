@@ -22,12 +22,13 @@
 import os
 import sys
 
-from setuptools import setup, find_packages, Extension, Feature
 from distutils.command.build_ext import build_ext
 from distutils.errors import CCompilerError
 from distutils.errors import DistutilsExecError
 from distutils.errors import DistutilsPlatformError
 import platform
+
+from setuptools import setup, find_packages, Extension
 
 py_impl = getattr(platform, 'python_implementation', lambda: None)
 is_pypy = py_impl() == 'PyPy'
@@ -35,26 +36,23 @@ is_jython = 'java' in sys.platform
 
 codeoptimization_c = os.path.join('src', 'zope', 'i18nmessageid',
                                   "_zope_i18nmessageid_message.c")
-codeoptimization = Feature(
-    "Optional code optimizations",
-    standard=True,
-    ext_modules=[Extension(
+codeoptimization = [
+    Extension(
         "zope.i18nmessageid._zope_i18nmessageid_message",
         [os.path.normcase(codeoptimization_c)]
-        )])
+    ),
+]
 
 extra = {
-    'extras_require': {
-        'testing': ['nose', 'coverage'],
-        'docs': ['Sphinx'],
-    },
+
 }
 
+ext_modules = []
 if not is_pypy and not is_jython:
     # Jython cannot build the C optimizations, while on PyPy they are
     # anti-optimizations (the C extension compatibility layer is known-slow,
     # and defeats JIT opportunities).
-    extra['features'] = {'codeoptimization': codeoptimization}
+    ext_modules = codeoptimization
 
 
 def read(*rnames):
@@ -69,20 +67,14 @@ class optional_build_ext(build_ext):
     def run(self):
         try:
             build_ext.run(self)
-
-        except DistutilsPlatformError:
-            # The sys.exc_info()[1] is to preserve compatibility with both
-            # Python 2.5 and 3.x, which is needed in setup.py.
-            self._unavailable(sys.exc_info()[1])
+        except DistutilsPlatformError as e:
+            self._unavailable(e)
 
     def build_extension(self, ext):
         try:
             build_ext.build_extension(self, ext)
-
-        except (CCompilerError, DistutilsExecError):
-            # The sys.exc_info()[1] is to preserve compatibility with both
-            # Python 2.5 and 3.x, which is needed in setup.py.
-            self._unavailable(sys.exc_info()[1])
+        except (CCompilerError, DistutilsExecError) as e:
+            self._unavailable(e)
 
     def _unavailable(self, e):
         # Write directly to stderr to preserve compatibility with both
@@ -141,5 +133,11 @@ setup(
     test_suite='zope.i18nmessageid.tests.test_suite',
     zip_safe=False,
     cmdclass={'build_ext': optional_build_ext},
-    **extra
+    ext_modules=ext_modules,
+    extras_require={
+        'testing': [
+            'nose', 'coverage'
+        ],
+        'docs': ['Sphinx'],
+    },
 )
