@@ -5,7 +5,8 @@
 5.0.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Remove deprecated use of setuptools features.  See `issue 22
+  <https://github.com/zopefoundation/zope.i18nmessageid/issues/22>`_.
 
 
 5.0.0 (2019-11-12)
