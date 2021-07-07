@@ -1,0 +1,33 @@
+# Generated from:
+# https://github.com/zopefoundation/meta/tree/master/config/c-code
+[meta]
+template = "c-code"
+commit-id = "9659f4d5d3dab75f0727e5e86349934c0bc776ae"
+
+[python]
+with-appveyor = true
+with-windows = false
+with-pypy = true
+with-future-python = false
+with-legacy-python = true
+with-docs = true
+with-sphinx-doctests = false
+
+[tox]
+use-flake8 = true
+
+[coverage]
+fail-under = 100
+
+[flake8]
+additional-config = [
+    "# F401 imported but unused",
+    "per-file-ignores =",
+    "    src/zope/i18nmessageid/__init__.py: F401",
+    ]
+
+[manifest]
+additional-rules = [
+    "include *.sh",
+    "recursive-include docs *.bat",
+    ]
