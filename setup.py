@@ -57,6 +57,7 @@ tests_require = [
     'coverage',
 ]
 
+
 def read(*rnames):
     with open(os.path.join(os.path.dirname(__file__), *rnames)) as stream:
         return stream.read()
@@ -66,6 +67,7 @@ class optional_build_ext(build_ext):
     """This class subclasses build_ext and allows
        the building of C extensions to fail.
     """
+
     def run(self):
         try:
             build_ext.run(self)
@@ -91,7 +93,6 @@ class optional_build_ext(build_ext):
         print('*' * 80, file=sys.stderr)
 
 
-
 setup(
     name='zope.i18nmessageid',
     version='5.0.2.dev0',
@@ -102,7 +103,7 @@ setup(
         read('README.rst')
         + '\n\n' +
         read('CHANGES.rst')
-        ),
+    ),
     keywords="zope i18n message factory",
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -117,6 +118,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Natural Language :: English',
