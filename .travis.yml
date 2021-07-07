@@ -31,6 +31,17 @@ jobs:
       install: docker pull $DOCKER_IMAGE
       script: bash .manylinux.sh
 
+    - name: 64-bit manylinux wheels (all Pythons)
+      services: docker
+      arch: arm64-graviton2
+      group: edge
+      dist: focal
+      virt: vm
+      python: 3.8
+      env: DOCKER_IMAGE=quay.io/pypa/manylinux2014_aarch64
+      install: docker pull $DOCKER_IMAGE
+      script: bash .manylinux.sh
+
     # It's important to use 'macpython' builds to get the least
     # restrictive wheel tag. It's also important to avoid
     # 'homebrew 3' because it floats instead of being a specific version.
