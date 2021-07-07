@@ -31,3 +31,11 @@ additional-rules = [
     "include *.sh",
     "recursive-include docs *.bat",
     ]
+
+[appveyor]
+global-env-vars = [
+    "global:",
+    "  TWINE_USERNAME: __token__",
+    "  TWINE_PASSWORD:",
+    "    secure: aoZC/+rvJKg8B5GMGIxd1VZ0Oxtmc0lPMiqT2wHP5qBRoZf6tEB7n9u7uCIifcAX1IWsLCRF7DKWvvCQTFJL5HcQvXFQSnEuXvdMT/utFFx9eCCy+Cu+WuWkasGCG+gx9uhMTe01mixi8yujgVj894Xjdv5YyNH2dPeqV5kInTzYrOmKZs1FTvKTlYZNHyYWRnYhyaLBn4FmmeuXuFcd5o05jkaa2dnerW85F3sr7mWbCgL4GpEQ59rYX34Cl4EdEXw+IViTyFWJuZp+k9GCUnzxAmA+vlfoSbZ6JfvTLaU=",
+    ]
