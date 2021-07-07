@@ -76,8 +76,7 @@ Messages at first seem like they are text:
 
   >>> robot == u'robot-message'
   True
-  >>> import six
-  >>> isinstance(robot, six.text_type)
+  >>> isinstance(robot, str)
   True
 
 The additional domain, default and mapping information is available
