@@ -34,6 +34,8 @@ additional-rules = [
 
 [appveyor]
 global-env-vars = [
+    "# Currently the builds use @mgedmin's Appveyor account.  The PyPI token belongs",
+    "# to zope.wheelbuilder, which is managed by @mgedmin and @dataflake.",
     "global:",
     "  TWINE_USERNAME: __token__",
     "  TWINE_PASSWORD:",
