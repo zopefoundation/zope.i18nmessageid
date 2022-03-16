@@ -9,7 +9,7 @@
         :target: https://travis-ci.com/zopefoundation/zope.i18nmessageid
 
 .. image:: https://readthedocs.org/projects/zopei18nmessageid/badge/?version=latest
-        :target: http://zopei18nmessageid.readthedocs.org/en/latest/
+        :target: µ
         :alt: Documentation Status
 
 To translate any text, we must be able to discover the source domain
@@ -35,4 +35,4 @@ This package provides facilities for *declaring* such messages within
 program source text;  translation of the messages is the responsiblitiy
 of the 'zope.i18n' package.
 
-Please see http://docs.zope.org/zope.i18nmessageid/ for the documentation.
+Please see http://zopei18nmessageid.readthedocs.org/en/latest/ for the documentation.
