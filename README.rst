@@ -5,11 +5,11 @@
     :target: https://pypi.python.org/pypi/zope.i18nmessageid/
     :alt: Latest Version
 
-.. image:: https://travis-ci.com/zopefoundation/zope.i18nmessageid.svg?branch=master
-        :target: https://travis-ci.com/zopefoundation/zope.i18nmessageid
-
+.. image:: https://github.com/zopefoundation/zope.i18nmessageid/actions/workflows/tests.yml/badge.svg
+        :target: https://github.com/zopefoundation/zope.i18nmessageid/actions/workflows/tests.yml
+        
 .. image:: https://readthedocs.org/projects/zopei18nmessageid/badge/?version=latest
-        :target: µ
+        :target: http://zopei18nmessageid.readthedocs.org/en/latest/
         :alt: Documentation Status
 
 To translate any text, we must be able to discover the source domain
