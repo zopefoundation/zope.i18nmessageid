@@ -1,0 +1,26 @@
+# Generated from:
+# https://github.com/zopefoundation/meta/tree/master/config/c-code
+[meta]
+template = "c-code"
+commit-id = "b4dd6f9ffd3d6a2cde7dc70512c62d4c7ed22cd6"
+
+[python]
+with-appveyor = true
+with-windows = false
+with-pypy = true
+with-future-python = false
+with-legacy-python = true
+with-docs = true
+with-sphinx-doctests = false
+
+[tox]
+use-flake8 = false
+
+[coverage]
+fail-under = 0
+
+[manifest]
+additional-rules = [
+    "include *.sh",
+    "recursive-include docs *.bat",
+    ]
