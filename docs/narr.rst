@@ -70,13 +70,14 @@ with a string that needs to be translatable:
   >>> _ = MessageFactory("futurama")
   >>> robot = _(u"robot-message", u"${name} is a robot.")
 
-Messages at first seem like they are unicode strings:
+Messages at first seem like they are text strings:
 
 .. doctest::
 
+  >>> import six
   >>> robot == u'robot-message'
   True
-  >>> isinstance(robot, unicode)
+  >>> isinstance(robot, six.text_type)
   True
 
 The additional domain, default and mapping information is available
@@ -98,17 +99,17 @@ object.  They cannot be changed once the message id is created:
   >>> robot.domain = "planetexpress"
   Traceback (most recent call last):
   ...
-  TypeError: readonly attribute
+  AttributeError: readonly attribute
 
   >>> robot.default = u"${name} is not a robot."
   Traceback (most recent call last):
   ...
-  TypeError: readonly attribute
+  AttributeError: readonly attribute
 
   >>> robot.mapping = {u'name': u'Bender'}
   Traceback (most recent call last):
   ...
-  TypeError: readonly attribute
+  AttributeError: readonly attribute
 
 If you need to change their information, you'll have to make a new
 message id object:
