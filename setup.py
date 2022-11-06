@@ -21,15 +21,17 @@
 from __future__ import print_function
 
 import os
+import platform
 import sys
-
 from distutils.command.build_ext import build_ext
 from distutils.errors import CCompilerError
 from distutils.errors import DistutilsExecError
 from distutils.errors import DistutilsPlatformError
-import platform
 
-from setuptools import setup, find_packages, Extension
+from setuptools import Extension
+from setuptools import find_packages
+from setuptools import setup
+
 
 py_impl = getattr(platform, 'python_implementation', lambda: None)
 is_pypy = py_impl() == 'PyPy'
@@ -56,6 +58,7 @@ tests_require = [
     'zope.testrunner',
     'coverage',
 ]
+
 
 def read(*rnames):
     with open(os.path.join(os.path.dirname(__file__), *rnames)) as stream:

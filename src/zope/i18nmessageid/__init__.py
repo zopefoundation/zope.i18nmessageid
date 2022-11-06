@@ -13,7 +13,9 @@
 ##############################################################################
 """I18n Messages
 """
-from zope.i18nmessageid.message import Message, MessageFactory
+from zope.i18nmessageid.message import Message
+from zope.i18nmessageid.message import MessageFactory
 
-# import this as _ to create i18n messages in the zope domain
+
+#  import this as _ to create i18n messages in the zope domain
 ZopeMessageFactory = MessageFactory('zope')

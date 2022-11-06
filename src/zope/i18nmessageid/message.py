@@ -15,6 +15,7 @@
 """
 import six
 
+
 __docformat__ = "reStructuredText"
 _marker = object()
 
