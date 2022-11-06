@@ -94,10 +94,9 @@ class optional_build_ext(build_ext):
         print('*' * 80, file=sys.stderr)
 
 
-
 setup(
     name='zope.i18nmessageid',
-    version='5.1.0.dev0',
+    version='5.1.0',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
     description='Message Identifiers for internationalization',
