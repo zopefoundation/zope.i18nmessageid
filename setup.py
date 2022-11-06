@@ -94,7 +94,7 @@ class optional_build_ext(build_ext):
 
 setup(
     name='zope.i18nmessageid',
-    version='5.0.2.dev0',
+    version='5.1.0.dev0',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
     description='Message Identifiers for internationalization',
@@ -117,6 +117,9 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Natural Language :: English',
@@ -130,6 +133,14 @@ setup(
     package_dir={'': 'src'},
     namespace_packages=['zope'],
     install_requires=['setuptools', 'six'],
+    python_requires=', '.join([
+      '>=2.7',
+      '!=3.0.*',
+      '!=3.1.*',
+      '!=3.2.*',
+      '!=3.3.*',
+      '!=3.4.*',
+    ]),
     include_package_data=True,
     test_suite='zope.i18nmessageid.tests.test_suite',
     zip_safe=False,
