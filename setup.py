@@ -96,7 +96,7 @@ class optional_build_ext(build_ext):
 
 setup(
     name='zope.i18nmessageid',
-    version='5.1.1.dev0',
+    version='5.1.1',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
     description='Message Identifiers for internationalization',
