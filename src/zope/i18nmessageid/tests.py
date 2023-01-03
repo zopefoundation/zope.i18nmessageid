@@ -151,7 +151,7 @@ class PyMessageTests(unittest.TestCase):
         # https://github.com/zopefoundation/zope.i18nmessageid/issues/14
         pref_msg = self._makeOne("${name} Preferences")
         self.assertIsNone(pref_msg.default)
-        copy = self._makeOne(pref_msg, mapping={u'name': u'name'})
+        copy = self._makeOne(pref_msg, mapping={'name': 'name'})
         self.assertIsNone(copy.default)
 
     def test_copy_no_overrides(self):
@@ -220,12 +220,12 @@ class PyMessageTests(unittest.TestCase):
              'testings', 'defaults', 2))
 
     def test_non_unicode_default(self):
-        message = self._makeOne(u'str', default=123)
+        message = self._makeOne('str', default=123)
         self.assertEqual(message.default, 123)
 
     def test_non_numeric_number(self):
         with self.assertRaises((TypeError, AttributeError)):
-            self._makeOne(u'str', default=123, number="one")
+            self._makeOne('str', default=123, number="one")
 
 
 @unittest.skipIf(messageid.Message is messageid.pyMessage, "Duplicate tests")

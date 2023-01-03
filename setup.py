@@ -18,7 +18,6 @@
 ##############################################################################
 """Setup for zope.i18nmessageid package
 """
-from __future__ import print_function
 
 import os
 import platform
@@ -112,11 +111,7 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Zope Public License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
@@ -135,14 +130,7 @@ setup(
     package_dir={'': 'src'},
     namespace_packages=['zope'],
     install_requires=['setuptools', 'six'],
-    python_requires=', '.join([
-      '>=2.7',
-      '!=3.0.*',
-      '!=3.1.*',
-      '!=3.2.*',
-      '!=3.3.*',
-      '!=3.4.*',
-    ]),
+    python_requires='>=3.7',
     include_package_data=True,
     test_suite='zope.i18nmessageid.tests.test_suite',
     zip_safe=False,
