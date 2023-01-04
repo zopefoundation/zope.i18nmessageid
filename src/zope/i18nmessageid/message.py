@@ -64,7 +64,7 @@ class Message(str):
             self.number = number
 
         if self.number is not None and not isinstance(
-                self.number, (int,) + (float,)):
+                self.number, (int, float)):
             raise TypeError('`number` should be an integer or a float')
 
         self._readonly = True
