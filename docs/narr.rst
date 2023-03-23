@@ -75,7 +75,7 @@ Messages at first seem like they are text strings:
 .. doctest::
 
   >>> import six
-  >>> robot == u'robot-message'
+  >>> robot == 'robot-message'
   True
   >>> isinstance(robot, six.text_type)
   True
@@ -85,7 +85,7 @@ through attributes:
 
 .. doctest::
 
-  >>> robot.default == u'${name} is a robot.'
+  >>> robot.default == '${name} is a robot.'
   True
   >>> robot.mapping
   >>> robot.domain
@@ -106,24 +106,24 @@ object.  They cannot be changed once the message id is created:
   ...
   AttributeError: readonly attribute
 
-  >>> robot.mapping = {u'name': u'Bender'}
+  >>> robot.mapping = {'name': 'Bender'}
   Traceback (most recent call last):
   ...
   AttributeError: readonly attribute
 
-If you need to change their information, you'll have to make a new
+If you need to change their information, yo'll have to make a new
 message id object:
 
 .. doctest::
 
-  >>> new_robot = Message(robot, mapping={u'name': u'Bender'})
-  >>> new_robot == u'robot-message'
+  >>> new_robot = Message(robot, mapping={'name': 'Bender'})
+  >>> new_robot == 'robot-message'
   True
   >>> new_robot.domain
   'futurama'
-  >>> new_robot.default == u'${name} is a robot.'
+  >>> new_robot.default == '${name} is a robot.'
   True
-  >>> new_robot.mapping == {u'name': u'Bender'}
+  >>> new_robot.mapping == {'name': 'Bender'}
   True
 
 Last but not least, messages are reduceable for pickling:
@@ -133,20 +133,20 @@ Last but not least, messages are reduceable for pickling:
   >>> callable, args = new_robot.__reduce__()
   >>> callable is Message
   True
-  >>> args == (u'robot-message',
+  >>> args == ('robot-message',
   ...          'futurama',
-  ...          u'${name} is a robot.',
-  ...          {u'name': u'Bender'},
+  ...          '${name} is a robot.',
+  ...          {'name': 'Bender'},
   ...          None,
   ...          None,
   ...          None)
   True
 
-  >>> fembot = Message(u'fembot')
+  >>> fembot = Message('fembot')
   >>> callable, args = fembot.__reduce__()
   >>> callable is Message
   True
-  >>> args == (u'fembot', None, None, None, None, None, None)
+  >>> args == ('fembot', None, None, None, None, None, None)
   True
 
 Pickling and unpickling works, which means we can store message IDs in
@@ -160,10 +160,10 @@ a database:
    >>> (pickle_bot,
    ...  pickle_bot.domain,
    ...  pickle_bot.default,
-   ...  pickle_bot.mapping) == (u'robot-message',
+   ...  pickle_bot.mapping) == ('robot-message',
    ...                          'futurama',
-   ...                          u'${name} is a robot.',
-   ...                          {u'name': u'Bender'})
+   ...                          '${name} is a robot.',
+   ...                          {'name': 'Bender'})
    True
    >>> pickle_bot.__reduce__()[0] is Message
    True
