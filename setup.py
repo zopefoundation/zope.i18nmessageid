@@ -129,7 +129,7 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
     namespace_packages=['zope'],
-    install_requires=['setuptools', 'six'],
+    install_requires=['setuptools'],
     python_requires='>=3.7',
     include_package_data=True,
     test_suite='zope.i18nmessageid.tests.test_suite',

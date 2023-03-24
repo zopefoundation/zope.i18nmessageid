@@ -5,7 +5,7 @@
 6.0.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Drop dependency on ``six``.
 
 
 6.0.0 (2023-03-23)
