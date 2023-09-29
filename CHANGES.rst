@@ -5,7 +5,7 @@
 6.0.2 (unreleased)
 ==================
 
-- Add preliminary support for Python 3.12rc1.
+- Add preliminary support for Python 3.12rc3.
 
 
 6.0.1 (2023-03-24)
