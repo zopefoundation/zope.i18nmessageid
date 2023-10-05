@@ -95,7 +95,7 @@ class optional_build_ext(build_ext):
 
 setup(
     name='zope.i18nmessageid',
-    version='6.0.2.dev0',
+    version='6.1.0.dev0',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
     description='Message Identifiers for internationalization',
@@ -117,6 +117,7 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Natural Language :: English',
@@ -140,6 +141,6 @@ setup(
     extras_require={
         'testing': tests_require,
         'test': tests_require,
-        'docs': ['Sphinx'],
+        'docs': ['Sphinx', 'sphinx_rtd_theme'],
     },
 )

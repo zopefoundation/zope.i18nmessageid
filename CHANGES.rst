@@ -2,10 +2,10 @@
  Changes
 =========
 
-6.0.2 (unreleased)
+6.1.0 (unreleased)
 ==================
 
-- Add preliminary support for Python 3.12rc1.
+- Add support for Python 3.12.
 
 
 6.0.1 (2023-03-24)
