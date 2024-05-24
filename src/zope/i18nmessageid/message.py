@@ -13,6 +13,8 @@
 ##############################################################################
 """I18n Messages and factories.
 """
+import types
+
 
 __docformat__ = "reStructuredText"
 _marker = object()
@@ -54,8 +56,10 @@ class Message(str):
             self.domain = domain
         if default is not _marker:
             self.default = default
-        if mapping is not _marker:
-            self.mapping = mapping
+        if mapping is None:
+            self.mapping = None
+        elif mapping is not _marker:
+            self.mapping = types.MappingProxyType(mapping)
         if msgid_plural is not _marker:
             self.msgid_plural = msgid_plural
         if default_plural is not _marker:
@@ -81,9 +85,17 @@ class Message(str):
             return str.__setattr__(self, key, value)
 
     def __getstate__(self):
+        # types.MappingProxyType is not picklable
+        mapping = None if self.mapping is None else dict(self.mapping)
         return (
-            str(self), self.domain, self.default, self.mapping,
-            self.msgid_plural, self.default_plural, self.number)
+            str(self),
+            self.domain,
+            self.default,
+            mapping,
+            self.msgid_plural,
+            self.default_plural,
+            self.number,
+        )
 
     def __reduce__(self):
         return self.__class__, self.__getstate__()

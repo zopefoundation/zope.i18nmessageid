@@ -100,8 +100,13 @@ Message_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
   if (default_ != NULL)
     self->default_ = default_;
 
-  if (mapping != NULL)
-    self->mapping = mapping;
+  if (mapping == Py_None) {
+    self->mapping = Py_None;
+    Py_INCREF(Py_None);
+  } else if (mapping != NULL) {
+    self->mapping = PyDictProxy_New(mapping);
+  } else {
+  }
 
   if (value_plural != NULL)
     self->value_plural = value_plural;
@@ -172,15 +177,27 @@ Message_dealloc(Message *self)
 static PyObject *
 Message_reduce(Message *self)
 {
-  PyObject *value, *result;
+  PyObject *value, *mapping, *result;
   value = PyObject_CallFunctionObjArgs((PyObject *)&PyUnicode_Type, self, NULL);
   if (value == NULL)
     return NULL;
+  if (self->mapping == NULL) {
+    mapping = Py_None;
+  }
+  else if (self->mapping == Py_None) {
+    mapping = Py_None;
+  } else {
+    mapping = PyObject_CallFunctionObjArgs(
+        (PyObject *)&PyDict_Type, self->mapping, NULL);
+    if (mapping == NULL) {
+        return NULL;
+    }
+  }
   result = Py_BuildValue("(O(OOOOOOO))", Py_TYPE(&(self->base)),
              value,
              self->domain ? self->domain : Py_None,
              self->default_ ? self->default_ : Py_None,
-             self->mapping ? self->mapping : Py_None,
+             mapping,
              self->value_plural ? self->value_plural : Py_None,
              self->default_plural ? self->default_plural : Py_None,
              self->number ? self->number : Py_None);
