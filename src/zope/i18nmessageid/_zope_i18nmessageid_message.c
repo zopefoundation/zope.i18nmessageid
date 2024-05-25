@@ -15,6 +15,17 @@
 #include "Python.h"
 #include "structmember.h"
 
+/*
+ *  Don't use multi-phase module init or heap types for Python < 3.9.
+ */
+#if PY_VERSION_HEX < 0x03090000
+#define USE_STATIC_TYPES 1
+#define USE_HEAP_TYPES 0
+#else
+#define USE_STATIC_TYPES 0
+#define USE_HEAP_TYPES 1
+#endif
+
 static int is_message(PyObject* obj);  /* forward ref */
 
 /*
@@ -247,7 +258,8 @@ static PyMethodDef Message_methods[] = {
     { NULL } /* Sentinel */
 };
 
-static char MessageType__doc__[] =
+static char Message__name__[] = "zope.i18nmessageid.message.Message";
+static char Message__doc__[] =
   "Message\n"
   "\n"
   "This is a string used as a message.  It has a domain attribute that is\n"
@@ -256,28 +268,71 @@ static char MessageType__doc__[] =
   "no translation domain.  default may also be None, in which case the\n"
   "message id itself implicitly serves as the default text.\n";
 
+#if USE_STATIC_TYPES
+/*
+ *  Static type: MessageType
+ */
+
 static PyTypeObject MessageType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    .tp_name        = "zope.i18nmessageid.message.Message",
-    .tp_doc         = MessageType__doc__,
-    .tp_basicsize   = sizeof(Message),
-    .tp_flags       = Py_TPFLAGS_DEFAULT |
-                      Py_TPFLAGS_BASETYPE |
-                      Py_TPFLAGS_HAVE_GC,
-    .tp_new         = Message_new,
-    .tp_traverse    = Message_traverse,
-    .tp_clear       = Message_clear,
-    .tp_dealloc     = Message_dealloc,
-    .tp_methods     = Message_methods,
-    .tp_members     = Message_members,
+    .tp_name          = Message__name__,
+    .tp_doc           = Message__doc__,
+    .tp_basicsize     = sizeof(Message),
+    .tp_flags         = Py_TPFLAGS_DEFAULT |
+                        Py_TPFLAGS_BASETYPE |
+                        Py_TPFLAGS_HAVE_GC,
+    .tp_new           = Message_new,
+    .tp_traverse      = Message_traverse,
+    .tp_clear         = Message_clear,
+    .tp_dealloc       = Message_dealloc,
+    .tp_methods       = Message_methods,
+    .tp_members       = Message_members,
 };
+
+#else
+
+/*
+ *  Heap type: MessageType
+ */
+static PyType_Slot Message_type_slots[] = {
+    {Py_tp_doc,         Message__doc__},
+    {Py_tp_new,         Message_new},
+    {Py_tp_dealloc,     Message_dealloc},
+    {Py_tp_traverse,    Message_traverse},
+    {Py_tp_clear,       Message_clear},
+    {Py_tp_methods,     Message_methods},
+    {Py_tp_members,     Message_members},
+    {0,                 NULL}
+};
+
+static PyType_Spec Message_type_spec = {
+    .name             = Message__name__,
+    .basicsize        = sizeof(Message),
+    .flags            = Py_TPFLAGS_DEFAULT |
+                        Py_TPFLAGS_BASETYPE |
+                        Py_TPFLAGS_HAVE_GC,
+    .slots            = Message_type_slots
+};
+
+
+// TEMPORARY HACK!
+static PyTypeObject*  dynamic_message_type = NULL;
+
+#endif
 
 /*
  * Utility: returns True if 'obj' is an instance of 'MessageType'.
  */
 static int is_message(PyObject* obj)
 {
+#if USE_STATIC_TYPES
     return PyObject_TypeCheck(obj, &MessageType);
+#else
+    if (dynamic_message_type == NULL) {
+        return 0;
+    }
+    return PyObject_TypeCheck(obj, dynamic_message_type);
+#endif
 }
 
 /*
@@ -296,26 +351,47 @@ static struct PyModuleDef moduledef = {
 static PyObject*
 init(void)
 {
-    PyObject* m;
-    /* Initialize types: */
+    PyObject* module;
+
+#if USE_HEAP_TYPES
+    PyObject* message_bases;  /* Python 3.9 insists on a tuple */
+    PyObject* message_type;
+#endif
+
+    /* Create the module and add the functions */
+    module = PyModule_Create(&moduledef);
+
+    if (module == NULL) {
+        return NULL;
+    }
+
+    /* Initialize / add types: */
+
+#if USE_STATIC_TYPES
     MessageType.tp_base = &PyUnicode_Type;
+
     if (PyType_Ready(&MessageType) < 0) {
         return NULL;
     }
-
-    /* Create the module and add the functions */
-    m = PyModule_Create(&moduledef);
-
-    if (m == NULL) {
+    if (PyModule_AddObject(module, "Message", (PyObject*)&MessageType) < 0) {
         return NULL;
     }
+#else
+    message_bases = Py_BuildValue("(O)", (PyObject*)&PyUnicode_Type);
+    message_type = PyType_FromModuleAndSpec(
+        module, &Message_type_spec, message_bases
+    );
+    if (message_type == NULL) { return NULL; }
 
-    /* Add types: */
-    if (PyModule_AddObject(m, "Message", (PyObject*)&MessageType) < 0) {
+    // TEMPORARY HACK!!
+    dynamic_message_type = (PyTypeObject*)message_type;
+
+    if (PyModule_AddObject(module, "Message", message_type) < 0) {
         return NULL;
     }
+#endif
 
-    return m;
+    return module;
 }
 
 PyMODINIT_FUNC
