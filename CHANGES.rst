@@ -5,7 +5,10 @@
 6.2 (unreleased)
 ================
 
+- Build Windows wheels on GHA.
+
 - Add preliminary support for Python 3.13 as of 3.13a5.
+
 
 6.1.0 (2023-10-05)
 ==================

@@ -76,7 +76,7 @@ class Message(str):
         It cannot be changed once the message id is created.
         """
         if getattr(self, '_readonly', False):
-            raise TypeError('readonly attribute')
+            raise AttributeError('readonly attribute')
         else:
             return str.__setattr__(self, key, value)
 
