@@ -13,6 +13,14 @@
 ############################################################################*/
 
 #include "Python.h"
+#include "structmember.h"
+
+/* Forward reference for type checking. */
+static PyTypeObject MessageType;
+
+/*
+ *  Message type subclasses str
+ */
 
 typedef struct
 {
@@ -25,122 +33,9 @@ typedef struct
     PyObject* number;
 } Message;
 
-static PyTypeObject MessageType;
-
-static PyObject*
-Message_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
-{
-    static char* kwlist[] = { "value",        "domain",
-                              "default",      "mapping",
-                              "msgid_plural", "default_plural",
-                              "number",       NULL };
-    PyObject *value, *domain = NULL, *default_ = NULL, *mapping = NULL, *s;
-    PyObject *value_plural = NULL, *default_plural = NULL, *number = NULL;
-    Message* self;
-
-    if (!PyArg_ParseTupleAndKeywords(args,
-                                     kwds,
-                                     "O|OOOOOO",
-                                     kwlist,
-                                     &value,
-                                     &domain,
-                                     &default_,
-                                     &mapping,
-                                     &value_plural,
-                                     &default_plural,
-                                     &number))
-        return NULL;
-
-    if (number != NULL && Py_None != number) {
-        if (!(PyLong_Check(number) || PyFloat_Check(number))) {
-            PyErr_SetString(PyExc_TypeError,
-                            "`number` should be an integer or a float");
-            return NULL;
-        }
-    }
-
-    args = Py_BuildValue("(O)", value);
-    if (args == NULL)
-        return NULL;
-
-    s = PyUnicode_Type.tp_new(type, args, NULL);
-    Py_DECREF(args);
-    if (s == NULL)
-        return NULL;
-
-    if (!PyObject_TypeCheck(s, &MessageType)) {
-        PyErr_SetString(PyExc_TypeError,
-                        "unicode.__new__ didn't return a Message");
-        Py_DECREF(s);
-        return NULL;
-    }
-
-    self = (Message*)s;
-
-    if (PyObject_TypeCheck(value, &MessageType)) {
-        /* value is a Message so we copy it and use it as base */
-        self->domain = ((Message*)value)->domain;
-        self->default_ = ((Message*)value)->default_;
-        self->mapping = ((Message*)value)->mapping;
-        self->value_plural = ((Message*)value)->value_plural;
-        self->default_plural = ((Message*)value)->default_plural;
-        self->number = ((Message*)value)->number;
-    } else {
-        self->domain = NULL;
-        self->default_ = NULL;
-        self->mapping = NULL;
-        self->value_plural = NULL;
-        self->default_plural = NULL;
-        self->number = NULL;
-    }
-
-    if (domain != NULL)
-        self->domain = domain;
-
-    if (default_ != NULL)
-        self->default_ = default_;
-
-    if (mapping == Py_None) {
-        self->mapping = Py_None;
-        Py_INCREF(Py_None);
-    } else if (mapping != NULL) {
-        self->mapping = PyDictProxy_New(mapping);
-    } else {
-    }
-
-    if (value_plural != NULL)
-        self->value_plural = value_plural;
-
-    if (default_plural != NULL)
-        self->default_plural = default_plural;
-
-    if (number != NULL) {
-        self->number = number;
-    }
-
-    Py_XINCREF(self->mapping);
-    Py_XINCREF(self->default_);
-    Py_XINCREF(self->domain);
-    Py_XINCREF(self->value_plural);
-    Py_XINCREF(self->default_plural);
-    Py_XINCREF(self->number);
-
-    return (PyObject*)self;
-}
-
-/* Code to access structure members by accessing attributes */
-
-#include "structmember.h"
-
-static PyMemberDef Message_members[] = {
-    { "domain", T_OBJECT, offsetof(Message, domain), READONLY },
-    { "default", T_OBJECT, offsetof(Message, default_), READONLY },
-    { "mapping", T_OBJECT, offsetof(Message, mapping), READONLY },
-    { "msgid_plural", T_OBJECT, offsetof(Message, value_plural), READONLY },
-    { "default_plural", T_OBJECT, offsetof(Message, default_plural), READONLY },
-    { "number", T_OBJECT, offsetof(Message, number), READONLY },
-    { NULL } /* Sentinel */
-};
+/*
+ *  Message type slot handlers
+ */
 
 static int
 Message_traverse(Message* self, visitproc visit, void* arg)
@@ -175,37 +70,165 @@ Message_dealloc(Message* self)
 }
 
 static PyObject*
-Message_reduce(Message* self)
+Message_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
 {
-    PyObject *value, *mapping, *result;
-    value =
-      PyObject_CallFunctionObjArgs((PyObject*)&PyUnicode_Type, self, NULL);
-    if (value == NULL)
-        return NULL;
-    if (self->mapping == NULL) {
-        mapping = Py_None;
-    } else if (self->mapping == Py_None) {
-        mapping = Py_None;
-    } else {
-        mapping = PyObject_CallFunctionObjArgs(
-          (PyObject*)&PyDict_Type, self->mapping, NULL);
-        if (mapping == NULL) {
+    PyObject *value;
+    PyObject *domain = NULL;
+    PyObject *default_ = NULL;
+    PyObject *mapping = NULL;
+    PyObject *value_plural = NULL;
+    PyObject *default_plural = NULL;
+    PyObject *number = NULL;
+
+    static char* kwlist[] = {
+        "value", "domain", "default", "mapping",
+        "msgid_plural", "default_plural", "number", NULL
+    };
+
+    PyObject *new_args;
+    PyObject *new_str;
+    Message  *self;
+    Message  *other;
+
+    if (!PyArg_ParseTupleAndKeywords(
+        args, kwds, "O|OOOOOO", kwlist,
+        &value, &domain, &default_, &mapping,
+        &value_plural, &default_plural, &number)
+    ) { return NULL; }
+
+    if (number != NULL && Py_None != number) {
+        if (!(PyLong_Check(number) || PyFloat_Check(number))) {
+            PyErr_SetString(PyExc_TypeError,
+                            "`number` should be an integer or a float");
             return NULL;
         }
     }
-    result =
-      Py_BuildValue("(O(OOOOOOO))",
-                    Py_TYPE(&(self->base)),
-                    value,
-                    self->domain ? self->domain : Py_None,
-                    self->default_ ? self->default_ : Py_None,
-                    mapping,
-                    self->value_plural ? self->value_plural : Py_None,
-                    self->default_plural ? self->default_plural : Py_None,
-                    self->number ? self->number : Py_None);
+
+    new_args = Py_BuildValue("(O)", value);
+    if (new_args == NULL) { return NULL; }
+
+    new_str = PyUnicode_Type.tp_new(type, new_args, NULL);
+    Py_DECREF(new_args);
+    if (new_str == NULL) { return NULL; }
+
+    if (!PyObject_TypeCheck(new_str, &MessageType)) {
+        PyErr_SetString(PyExc_TypeError,
+                        "unicode.__new__ didn't return a Message");
+        Py_DECREF(new_str);
+        return NULL;
+    }
+
+    self = (Message*)new_str;
+
+    if (PyObject_TypeCheck(value, &MessageType)) {
+        /* value is a Message so we copy it and use it as base */
+        other = (Message*)value;
+        self->domain = other->domain;
+        self->default_ = other->default_;
+        self->mapping = other->mapping;
+        self->value_plural = other->value_plural;
+        self->default_plural = other->default_plural;
+        self->number = other->number;
+    } else {
+        self->domain = NULL;
+        self->default_ = NULL;
+        self->mapping = NULL;
+        self->value_plural = NULL;
+        self->default_plural = NULL;
+        self->number = NULL;
+    }
+
+    if (domain != NULL) {
+        self->domain = domain;
+    }
+
+    if (default_ != NULL) {
+        self->default_ = default_;
+    }
+
+    if (mapping == Py_None) {
+        self->mapping = Py_None;
+        Py_INCREF(Py_None);
+    } else if (mapping != NULL) {
+        /* Ensure that our mapping is immutable */
+        self->mapping = PyDictProxy_New(mapping);
+    } else {}
+
+    if (value_plural != NULL) {
+        self->value_plural = value_plural;
+    }
+
+    if (default_plural != NULL) {
+        self->default_plural = default_plural;
+    }
+
+    if (number != NULL) {
+        self->number = number;
+    }
+
+    /* Don't:  Py_XINCREF(self->mapping); we handed it above */
+    Py_XINCREF(self->default_);
+    Py_XINCREF(self->domain);
+    Py_XINCREF(self->value_plural);
+    Py_XINCREF(self->default_plural);
+    Py_XINCREF(self->number);
+
+    return (PyObject*)self;
+}
+
+static PyObject*
+Message_reduce(Message* self)
+{
+    PyObject *value;
+    PyObject *mapping;
+    PyObject *result;
+
+    value = PyObject_CallFunctionObjArgs(
+        (PyObject*)&PyUnicode_Type, self, NULL);
+    if (value == NULL) { return NULL;}
+
+    if (self->mapping == NULL) {
+        mapping = Py_None; /* borrowed: Py_BuildValue will incref */
+    } else if (self->mapping == Py_None) {
+        mapping = Py_None; /* borrowed: Py_BuildValue will incref */
+    } else {
+        mapping = PyObject_CallFunctionObjArgs(
+          (PyObject*)&PyDict_Type, self->mapping, NULL);
+        if (mapping == NULL) { return NULL; }
+    }
+
+    result = Py_BuildValue(
+        "(O(OOOOOOO))",
+        Py_TYPE(&(self->base)),
+        value,
+        self->domain ? self->domain : Py_None,
+        self->default_ ? self->default_ : Py_None,
+        mapping,
+        self->value_plural ? self->value_plural : Py_None,
+        self->default_plural ? self->default_plural : Py_None,
+        self->number ? self->number : Py_None
+    );
+
+    if (mapping != Py_None) {
+        Py_DECREF(mapping);
+    }
     Py_DECREF(value);
+
     return result;
 }
+
+/* Code to access structure members by accessing attributes */
+
+
+static PyMemberDef Message_members[] = {
+    { "domain", T_OBJECT, offsetof(Message, domain), READONLY },
+    { "default", T_OBJECT, offsetof(Message, default_), READONLY },
+    { "mapping", T_OBJECT, offsetof(Message, mapping), READONLY },
+    { "msgid_plural", T_OBJECT, offsetof(Message, value_plural), READONLY },
+    { "default_plural", T_OBJECT, offsetof(Message, default_plural), READONLY },
+    { "number", T_OBJECT, offsetof(Message, number), READONLY },
+    { NULL } /* Sentinel */
+};
 
 static PyMethodDef Message_methods[] = {
     { "__reduce__",
