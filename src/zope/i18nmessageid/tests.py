@@ -53,8 +53,19 @@ class PyMessageTests(unittest.TestCase):
         self.assertEqual(message.msgid_plural, 'testings')
         self.assertEqual(message.default_plural, 'defaults')
         self.assertEqual(message.number, 2)
+
+        with self.assertRaises(TypeError):
+            message.mapping['key'] = 'new value'
+
         if self._TEST_READONLY:
             self.assertTrue(message._readonly)
+
+    def test_mapping_is_readonly(self):
+        mapping = {'key': 'value'}
+        message = self._makeOne('testing', 'domain', mapping=mapping)
+
+        with self.assertRaises(TypeError):
+            message.mapping['key'] = 'new value'
 
     def test_values_without_defaults(self):
         mapping = {'key': 'value'}
@@ -205,6 +216,16 @@ class PyMessageTests(unittest.TestCase):
         message = self._makeOne('testing')
         with self.assertRaises((TypeError, AttributeError)):
             message.unknown = 'unknown'
+
+    def test___reduce___wo_values(self):
+        message = self._makeOne('testing')
+        klass, state = message.__reduce__()
+        self.assertTrue(klass is self._getTargetClass())
+        self.assertTrue(message.mapping is None)
+        self.assertEqual(
+            state,
+            ('testing', None, None, None, None, None, None)
+        )
 
     def test___reduce__(self):
         mapping = {'key': 'value'}
