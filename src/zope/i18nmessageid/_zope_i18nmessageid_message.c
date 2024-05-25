@@ -273,27 +273,17 @@ static PyTypeObject MessageType = {
     .tp_members     = Message_members,
 };
 
-/* List of methods defined in the module */
-static struct PyMethodDef _zope_i18nmessageid_message_methods[] = {
-    { NULL, (PyCFunction)NULL, 0, NULL }, /* sentinel */
-};
+/*
+ *  Module initialization structures
+ */
 
-static char _zope_i18nmessageid_message_module_name[] =
-  "_zope_i18nmessageid_message";
-
-static char _zope_i18nmessageid_message_module_documentation[] =
-  "I18n Messages";
+static char _zim__name__[]  = "_zope_i18nmessageid_message";
+static char _zim__doc__[]   = "I18n Messages";
 
 static struct PyModuleDef moduledef = {
     PyModuleDef_HEAD_INIT,
-    _zope_i18nmessageid_message_module_name,          /* m_name */
-    _zope_i18nmessageid_message_module_documentation, /* m_doc */
-    -1,                                               /* m_size */
-    _zope_i18nmessageid_message_methods,              /* m_methods */
-    NULL,                                             /* m_reload */
-    NULL,                                             /* m_traverse */
-    NULL,                                             /* m_clear */
-    NULL,                                             /* m_free */
+    .m_name=_zim__name__,
+    .m_doc=_zim__doc__,
 };
 
 static PyObject*
