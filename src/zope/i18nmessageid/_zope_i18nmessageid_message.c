@@ -377,22 +377,24 @@ _zim_state_clear(PyObject* module)
 static int
 _zim_module_exec(PyObject* module)
 {
+    _zim_module_state* rec = _zim_state_init(module);
+
     /* Initialize / add types: */
 
 #if USE_STATIC_TYPES
-    _zim_state_init(module); /* no dynamic types, but ensure NULL */
 
     MessageType.tp_base = &PyUnicode_Type;
 
     if (PyType_Ready(&MessageType) < 0) {
         return -1;
     }
+    Py_INCREF(&MessageType);
+    rec->message_type = &MessageType;
 
     if (PyModule_AddObject(module, "Message", (PyObject*)&MessageType) < 0) {
         return -1;
     }
 #else
-    _zim_module_state* rec = _zim_state_init(module);
     PyObject* message_bases;  /* Python 3.9 insists on a tuple */
     PyObject* message_type;
 
