@@ -89,7 +89,7 @@ Message_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
 
     PyObject *new_args;
     PyObject *new_str;
-    Message  *self;
+    Message  *new_msg;
     Message  *other;
 
     if (!PyArg_ParseTupleAndKeywords(
@@ -120,62 +120,62 @@ Message_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
         return NULL;
     }
 
-    self = (Message*)new_str;
+    new_msg = (Message*)new_str;
 
     if (PyObject_TypeCheck(value, &MessageType)) {
         /* value is a Message so we copy it and use it as base */
         other = (Message*)value;
-        self->domain = other->domain;
-        self->default_ = other->default_;
-        self->mapping = other->mapping;
-        self->value_plural = other->value_plural;
-        self->default_plural = other->default_plural;
-        self->number = other->number;
+        new_msg->domain = other->domain;
+        new_msg->default_ = other->default_;
+        new_msg->mapping = other->mapping;
+        new_msg->value_plural = other->value_plural;
+        new_msg->default_plural = other->default_plural;
+        new_msg->number = other->number;
     } else {
-        self->domain = NULL;
-        self->default_ = NULL;
-        self->mapping = NULL;
-        self->value_plural = NULL;
-        self->default_plural = NULL;
-        self->number = NULL;
+        new_msg->domain = NULL;
+        new_msg->default_ = NULL;
+        new_msg->mapping = NULL;
+        new_msg->value_plural = NULL;
+        new_msg->default_plural = NULL;
+        new_msg->number = NULL;
     }
 
     if (domain != NULL) {
-        self->domain = domain;
+        new_msg->domain = domain;
     }
 
     if (default_ != NULL) {
-        self->default_ = default_;
+        new_msg->default_ = default_;
     }
 
     if (mapping == Py_None) {
-        self->mapping = Py_None;
+        new_msg->mapping = Py_None;
         Py_INCREF(Py_None);
     } else if (mapping != NULL) {
         /* Ensure that our mapping is immutable */
-        self->mapping = PyDictProxy_New(mapping);
+        new_msg->mapping = PyDictProxy_New(mapping);
     } else {}
 
     if (value_plural != NULL) {
-        self->value_plural = value_plural;
+        new_msg->value_plural = value_plural;
     }
 
     if (default_plural != NULL) {
-        self->default_plural = default_plural;
+        new_msg->default_plural = default_plural;
     }
 
     if (number != NULL) {
-        self->number = number;
+        new_msg->number = number;
     }
 
-    /* Don't:  Py_XINCREF(self->mapping); we handed it above */
-    Py_XINCREF(self->default_);
-    Py_XINCREF(self->domain);
-    Py_XINCREF(self->value_plural);
-    Py_XINCREF(self->default_plural);
-    Py_XINCREF(self->number);
+    /* Don't:  Py_XINCREF(new_msg->mapping); we handed it above */
+    Py_XINCREF(new_msg->default_);
+    Py_XINCREF(new_msg->domain);
+    Py_XINCREF(new_msg->value_plural);
+    Py_XINCREF(new_msg->default_plural);
+    Py_XINCREF(new_msg->number);
 
-    return (PyObject*)self;
+    return (PyObject*)new_msg;
 }
 
 /*
