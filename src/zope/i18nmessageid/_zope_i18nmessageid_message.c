@@ -16,7 +16,7 @@
 #include "structmember.h"
 
 /*
- *  Don't use multi-phase module init or heap types for Python < 3.9.
+ *  Don't use heap-allocated types for Python < 3.9.
  */
 #if PY_VERSION_HEX < 0x03090000
 #define USE_STATIC_TYPES 1
