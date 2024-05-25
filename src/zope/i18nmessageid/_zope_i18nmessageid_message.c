@@ -15,8 +15,7 @@
 #include "Python.h"
 #include "structmember.h"
 
-/* Forward reference for type checking. */
-static PyTypeObject MessageType;
+static int is_message(PyObject* obj);  /* forward ref */
 
 /*
  *  Message type subclasses str
@@ -113,7 +112,7 @@ Message_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
     Py_DECREF(new_args);
     if (new_str == NULL) { return NULL; }
 
-    if (!PyObject_TypeCheck(new_str, &MessageType)) {
+    if (!is_message(new_str)) {
         PyErr_SetString(PyExc_TypeError,
                         "unicode.__new__ didn't return a Message");
         Py_DECREF(new_str);
@@ -122,7 +121,7 @@ Message_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
 
     new_msg = (Message*)new_str;
 
-    if (PyObject_TypeCheck(value, &MessageType)) {
+    if (is_message(value)) {
         /* value is a Message so we copy it and use it as base */
         other = (Message*)value;
         new_msg->domain = other->domain;
@@ -272,6 +271,14 @@ static PyTypeObject MessageType = {
     .tp_methods     = Message_methods,
     .tp_members     = Message_members,
 };
+
+/*
+ * Utility: returns True if 'obj' is an instance of 'MessageType'.
+ */
+static int is_message(PyObject* obj)
+{
+    return PyObject_TypeCheck(obj, &MessageType);
+}
 
 /*
  *  Module initialization structures
