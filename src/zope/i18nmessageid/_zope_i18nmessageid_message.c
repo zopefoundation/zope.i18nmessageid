@@ -337,15 +337,17 @@ typedef struct {
  */
 static int is_message(PyTypeObject* type, PyObject* obj)
 {
+    PyTypeObject* message_type;
 #if USE_STATIC_TYPES
-    return PyObject_TypeCheck(obj, &MessageType);
+    message_type = &MessageType;
 #else
     _zim_module_state* rec = (_zim_module_state*)PyType_GetModuleState(type);
     /* PT_GMS will already have set the exception */
     if (rec == NULL) { return 0; }
 
-    return PyObject_TypeCheck(obj, rec->message_type);
+    message_type = rec->message_type;
 #endif
+    return PyObject_TypeCheck(obj, message_type);
 }
 
 static _zim_module_state*
