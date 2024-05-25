@@ -22,88 +22,84 @@ or fork it and get a writeable checkout of your fork:
 
    $ git clone git@github.com/jrandom/zope.i18nmessageid.git
 
-The project also mirrors the trunk from the Github repository as a
-Bazaar branch on Launchpad:
 
-https://code.launchpad.net/zope.i8nmessageid
-
-You can branch the trunk from there using Bazaar:
-
-.. code-block:: sh
-
-   $ bzr branch lp:zope.i8nmessageid
-
-
-
-Working in a ``virtualenv``
-###########################
+Working in a Python virtual environment
+#######################################
 
 Installing
 ----------
 
-If you use the ``virtualenv`` package to create lightweight Python
-development environments, you can run the tests using nothing more
+You can use Python's standard ``venv`` package to create lightweight Python
+development environments, where you can run the tests using nothing more
 than the ``python`` binary in a virtualenv.  First, create a scratch
 environment:
 
 .. code-block:: sh
 
-   $ /path/to/virtualenv --no-site-packages /tmp/hack-zope.i18nmessageid
+   $ python3.12 -m venv /tmp/hack-zope.i18nmessageid
 
-Next, get this package registered as a "development egg" in the
+Next, install this package in "development mod" in the newly-created
 environment:
 
 .. code-block:: sh
 
-   $ /tmp/hack-zope.i8nmessageid/bin/python setup.py develop
+   $ /tmp/hack-zope.i8nmessageid/bin/pip install -e .
 
 Running the tests
 -----------------
 
-Run the tests using the build-in ``setuptools`` testrunner:
+Once installed,  you can run the tests using the standard library's
+``unittest`` module:
 
 .. code-block:: sh
 
-   $ /tmp/hack-zope.i8nmessageid/bin/python setup.py test -q
-   running test
-   ....................
+   $ /tmp/hack-zope.i8nmessageid/bin/python -m unittest discover -s src
+   .........................................
    ----------------------------------------------------------------------
-   Ran 20 tests in 0.001s
+   Ran 41 tests in 0.002s
 
    OK
 
-The ``dev`` command alias downloads and installs extra tools, like the
-:mod:`nose` testrunner and the :mod:`coverage` coverage analyzer:
+You can install a more comprehensive set of tools using the ``testing``
+extra:
 
 .. code-block:: sh
 
-   $ /tmp/hack-zope.i8nmessageid/bin/python setup.py dev
-   $ /tmp/hack-zope.i8nmessageid/bin/nosetests
-   running nosetests
-   ....................
-   ----------------------------------------------------------------------
-   Ran 20 tests in 0.030s
+   $ /tmp/hack-zope.i8nmessageid/bin/pip install -e ".[testing]"
 
-   OK
 
-If you have the :mod:`coverage` pacakge installed in the virtualenv,
-you can see how well the tests cover the code:
+That command installs the tools needed to run
+the tests:  in particular, the ``zope.testrunner`` (see
+:external+testrunner:std:doc:`getting-started`) and
+:external+coverage:std:doc:`index` tools.
+
+To run the tests via ``zope.testrunner``:
 
 .. code-block:: sh
 
-   $ /tmp/hack-zope.i8nmessageid/bin/nosetests --with coverage
-   running nosetests
-   ....................
-   Name                         Stmts   Miss  Cover   Missing
-   ----------------------------------------------------------
-   zope.i18nmessageid               3      0   100%   
-   zope.i18nmessageid.message      36      0   100%   
-   ----------------------------------------------------------
-   TOTAL                           39      0   100%   
-   ----------------------------------------------------------------------
-   Ran 21 tests in 0.036s
+   $ /tmp/hack-zope.i8nmessageid/bin/zope-testrunner --test-path=src
+   Running zope.testrunner.layer.UnitTests tests:
+     Set up zope.testrunner.layer.UnitTests in 0.000 seconds.
+     Ran 41 tests with 0 failures, 0 errors and 0 skipped in 0.003 seconds.
+   Tearing down left over layers:
+     Tear down zope.testrunner.layer.UnitTests in 0.000 seconds.
 
-   OK
+Running the tests under :mod:`coverage` lets you see how well the tests
+cover the code:
+
+.. code-block:: sh
+
+   $ /tmp/hack-zope.i8nmessageid/bin/coverage run -m zope.testrunner \
+      --test-path=src
+   ...
+   $ coverage report -i -m --fail-under=100
+   Name                                 Stmts   Miss Branch BrPart    Cover   Missing
+   ----------------------------------------------------------------------------------
+   src/zope/i18nmessageid/__init__.py       4      0      0      0  100.00%
+   src/zope/i18nmessageid/message.py       52      0     18      0  100.00%
+   src/zope/i18nmessageid/tests.py        189      0     38      0  100.00%
+   ----------------------------------------------------------------------------------
+   TOTAL                                  245      0     56      0  100.00%
 
 
 Building the documentation
@@ -117,70 +113,39 @@ The ``docs`` command alias downloads and installs Sphinx and its dependencies:
 
 .. code-block:: sh
 
-   $ /tmp/hack-zope.i8nmessageid/bin/python setup.py docs
+   $ /tmp/hack-zope.i8nmessageid/bin/pip install ".[docs]"
    ...
-   $ bin/sphinx-build -b html -d docs/_build/doctrees docs docs/_build/html
+   $ /tmp/hack-zope.i8nmessageid/bin/sphinx-build -b html -d docs/_build/doctrees docs docs/_build/html
    ...
    build succeeded.
+
+   The HTML pages are in docs/_build/html.
 
 You can also test the code snippets in the documentation:
 
 .. code-block:: sh
 
-   $ bin/sphinx-build -b doctest -d docs/_build/doctrees docs docs/_build/doctest
+   $ /tmp/hack-zope.i8nmessageid/bin/sphinx-build -b doctest -d docs/_build/doctrees docs docs/_build/doctest
    ...
    running tests...
 
-   Document: index
-   ---------------
+   Document: narr
+   --------------
    1 items passed all tests:
-     17 tests in default
-   17 tests in 1 items.
-   17 passed and 0 failed.
+     35 tests in default
+   35 tests in 1 items.
+   35 passed and 0 failed.
    Test passed.
 
    Doctest summary
    ===============
-      17 tests
+      35 tests
        0 failures in tests
        0 failures in setup code
+       0 failures in cleanup code
    build succeeded.
 
-
-Using :mod:`zc.buildout`
-########################
-
-Setting up the buildout
------------------------
-
-:mod:`zope.i18nmessageid` ships with its own :file:`buildout.cfg` file and
-:file:`bootstrap.py` for setting up a development buildout:
-
-.. code-block:: sh
-
-   $ /path/to/python2.6 bootstrap.py
-   ...
-   Generated script '.../bin/buildout'
-   $ bin/buildout
-   Develop: '/home/jrandom/projects/Zope/BTK/i18nmessageid/.'
-   ...
-   Generated script '.../bin/sphinx-quickstart'.
-   Generated script '.../bin/sphinx-build'.
-
-
-Running the tests
------------------
-
-You can now run the tests:
-
-.. code-block:: sh
-
-   $ bin/test --all
-   Running zope.testing.testrunner.layer.UnitTests tests:
-     Set up zope.testing.testrunner.layer.UnitTests in 0.000 seconds.
-     Ran 702 tests with 0 failures and 0 errors in 0.000 seconds.
-   Tearing down left over layers:
-     Tear down zope.testing.testrunner.layer.UnitTests in 0.000 seconds.
+   Testing of doctests in the sources finished, look at the results in docs/_build/doctest/output.txt.
 
 
 Using :mod:`tox`
@@ -192,44 +157,72 @@ Running Tests on Multiple Python Versions
 
 `tox <http://tox.testrun.org/latest/>`_ is a Python-based test automation
 tool designed to run tests against multiple Python versions.  It creates
-a ``virtualenv`` for each configured version, installs the current package
-and configured dependencies into each ``virtualenv``, and then runs the
+a virtual environment for each configured version, installs the current
+package and configured dependencies into each environment, and then runs the
 configured commands.
    
 :mod:`zope.i18nmessageid` configures the following :mod:`tox` environments via
 its ``tox.ini`` file:
 
-- The ``py26``, ``py27``, ``py33``, ``py34``, and ``pypy`` environments
-  builds a ``virtualenv`` with ``pypy``,
-  installs :mod:`zope.i18nmessageid` and dependencies, and runs the tests
-  via ``python setup.py test -q``.
+- The ``lint`` environment runs various "code quality" tests on the source,
+  and fails on any errors they find.
 
-- The ``coverage`` environment builds a ``virtualenv`` with ``python2.6``,
+- The ``py38``, ``py39``, ``py310``, ``py311``, ``py312``, ``py313``, and
+  ``pypy3`` environments each build an environment from the corresponding
+  Python version, install :mod:`zope.i18nmessageid` and testing dependencies,
+  and runs the tests.  It then installs ``Sphinx`` and runs the doctest
+  snippets.
+
+- The ``coverage`` environment builds a virtual environment,
   installs :mod:`zope.i18nmessageid` and dependencies, installs
-  :mod:`nose` and :mod:`coverage`, and runs ``nosetests`` with statement
+  :mod:`coverage`, and runs the tests with statement and branch
   coverage.
 
-- The ``docs`` environment builds a virtualenv with ``python2.6``, installs
+- The ``docs`` environment builds a virtual environment, installs
   :mod:`zope.i18nmessageid` and dependencies, installs ``Sphinx`` and
   dependencies, and then builds the docs and exercises the doctest snippets.
 
-This example requires that you have a working ``python2.6`` on your path,
+This example requires that you have a working ``python3.12`` on your path,
 as well as installing ``tox``:
 
 .. code-block:: sh
 
-   $ tox -e py26
-   GLOB sdist-make: .../zope.i18nmessageid/setup.py
-   py26 sdist-reinst: .../zope.i18nmessageid/.tox/dist/zope.i18nmessageid-4.0.2dev.zip
-   py26 runtests: commands[0]
+   $ tox -e py312
+   py312: install_deps> python -I -m pip install 'setuptools<69' Sphinx
    ...
-   ----------------------------------------------------------------------
-   Ran 1341 tests in 0.477s
+   py312: commands[0]> zope-testrunner --test-path=src -vc
+   Running tests at level 1
+   Running zope.testrunner.layer.UnitTests tests:
+     Set up zope.testrunner.layer.UnitTests in 0.000 seconds.
+     Running:
+   .........................................
+     Ran 41 tests with 0 failures, 0 errors, 0 skipped in 0.003 seconds.
+   Tearing down left over layers:
+     Tear down zope.testrunner.layer.UnitTests in 0.000 seconds.
+   py312: commands[1]> sphinx-build -b doctest -d /home/tseaver/projects/Zope/Z3/zope.i18nmessageid/.tox/py312/.cache/doctrees docs /home/tseaver/projects/Zope/Z3/zope.i18nmessageid/.tox/py312/.cache/doctest
+   Running Sphinx v7.3.7
+   ...
+   running tests...
 
-   OK
-   ___________________________________ summary ____________________________________
-   py26: commands succeeded
-   congratulations :)
+   Document: narr
+   --------------
+   1 items passed all tests:
+     35 tests in default
+   35 tests in 1 items.
+   35 passed and 0 failed.
+   Test passed.
+
+   Doctest summary
+   ===============
+      35 tests
+       0 failures in tests
+       0 failures in setup code
+       0 failures in cleanup code
+   build succeeded.
+
+   Testing of doctests in the sources finished, look at the results in .tox/py312/.cache/doctest/output.txt.
+     py312: OK (16.29=setup[15.11]+cmd[0.26,0.92] seconds)
+     congratulations :) (16.56 seconds)
 
 Running ``tox`` with no arguments runs all the configured environments,
 including building the docs and testing their snippets:
@@ -237,26 +230,19 @@ including building the docs and testing their snippets:
 .. code-block:: sh
 
    $ tox
-   GLOB sdist-make: .../zope.i18nmessageid/setup.py
-   py26 sdist-reinst: .../zope.i18nmessageid/.tox/dist/zope.i18nmessageid-4.0.2dev.zip
-   py26 runtests: commands[0]
+   lint: commands[0]> isort --check-only --diff /home/tseaver/projects/Zope/Z3/zope.i18nmessageid/src /home/tseaver/projects/Zope/Z3/zope.i18nmessageid/setup.py
+   lint: commands[1]> flake8 src setup.py
+     lint: OK (0.50=setup[0.02]+cmd[0.19,0.28] seconds)
+     congratulations :) (0.73 seconds)
    ...
-   Doctest summary
-   ===============
-   678 tests
-      0 failures in tests
-      0 failures in setup code
-      0 failures in cleanup code
-   build succeeded.
-   ___________________________________ summary ____________________________________
-   py26: commands succeeded
-   py27: commands succeeded
-   py32: commands succeeded
-   pypy: commands succeeded
-   coverage: commands succeeded
+   __________________________________ summary ____________________________________
+   lint: commands succeeded
+   py37: commands succeeded
+   ...
+   pypy3: commands succeeded
    docs: commands succeeded
+   coverage: commands succeeded
    congratulations :)
-
 
 
 Contributing to :mod:`zope.i18nmessageid`
@@ -287,14 +273,3 @@ in your fork, and push it.  You can then submit a pull request from your
 branch:
 
   https://github.com/zopefoundation/zope.i18nmessageid/pulls
-
-If you branched the code from Launchpad using Bazaar, you have another
-option:  you can "push" your branch to Launchpad:
-
-.. code-block:: sh
-
-   $ bzr push lp:~jrandom/zope.i18nmessageid/cool_feature
-
-After pushing your branch, you can link it to a bug report on Launchpad,
-or request that the maintainers merge your branch using the Launchpad
-"merge request" feature.
