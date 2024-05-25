@@ -259,51 +259,19 @@ static char MessageType__doc__[] =
 
 static PyTypeObject MessageType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    /* tp_name           */ "zope.i18nmessageid.message."
-                            "Message",
-    /* tp_basicsize      */ sizeof(Message),
-    /* tp_itemsize       */ 0,
-    /* tp_dealloc        */ (destructor)&Message_dealloc,
-    /* tp_print          */ (printfunc)0,
-    /* tp_getattr        */ (getattrfunc)0,
-    /* tp_setattr        */ (setattrfunc)0,
-    /* tp_compare        */ 0,
-    /* tp_repr           */ (reprfunc)0,
-    /* tp_as_number      */ 0,
-    /* tp_as_sequence    */ 0,
-    /* tp_as_mapping     */ 0,
-    /* tp_hash           */ (hashfunc)0,
-    /* tp_call           */ (ternaryfunc)0,
-    /* tp_str            */ (reprfunc)0,
-    /* tp_getattro       */ (getattrofunc)0,
-    /* tp_setattro       */ (setattrofunc)0,
-    /* tp_as_buffer      */ 0,
-    /* tp_flags          */ Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE |
-      Py_TPFLAGS_HAVE_GC,
-    /* tp_doc            */ MessageType__doc__,
-    /* tp_traverse       */ (traverseproc)Message_traverse,
-    /* tp_clear          */ (inquiry)Message_clear,
-    /* tp_richcompare    */ (richcmpfunc)0,
-    /* tp_weaklistoffset */ (long)0,
-    /* tp_iter           */ (getiterfunc)0,
-    /* tp_iternext       */ (iternextfunc)0,
-    /* tp_methods        */ Message_methods,
-    /* tp_members        */ Message_members,
-    /* tp_getset         */ 0,
-    /* tp_base           */ 0,
-    /* tp_dict           */ 0, /* internal use */
-    /* tp_descr_get      */ (descrgetfunc)0,
-    /* tp_descr_set      */ (descrsetfunc)0,
-    /* tp_dictoffset     */ 0,
-    /* tp_init           */ (initproc)0,
-    /* tp_alloc          */ (allocfunc)0,
-    /* tp_new            */ (newfunc)Message_new,
-    /* tp_free           */ 0,          /* Low-level free-mem routine */
-    /* tp_is_gc          */ (inquiry)0, /* For PyObject_IS_GC */
+    .tp_name        = "zope.i18nmessageid.message.Message",
+    .tp_doc         = MessageType__doc__,
+    .tp_basicsize   = sizeof(Message),
+    .tp_flags       = Py_TPFLAGS_DEFAULT |
+                      Py_TPFLAGS_BASETYPE |
+                      Py_TPFLAGS_HAVE_GC,
+    .tp_new         = Message_new,
+    .tp_traverse    = Message_traverse,
+    .tp_clear       = Message_clear,
+    .tp_dealloc     = Message_dealloc,
+    .tp_methods     = Message_methods,
+    .tp_members     = Message_members,
 };
-
-/* End of code for Message objects */
-/* -------------------------------------------------------- */
 
 /* List of methods defined in the module */
 static struct PyMethodDef _zope_i18nmessageid_message_methods[] = {
