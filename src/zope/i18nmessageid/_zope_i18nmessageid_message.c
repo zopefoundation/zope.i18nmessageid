@@ -21,12 +21,14 @@
 #if PY_VERSION_HEX < 0x03090000
 #define USE_STATIC_TYPES 1
 #define USE_HEAP_TYPES 0
+#define USE_MODULE_STATE 0
 #else
 #define USE_STATIC_TYPES 0
 #define USE_HEAP_TYPES 1
+#define USE_MODULE_STATE 1
 #endif
 
-static int is_message(PyObject* obj);  /* forward ref */
+static int is_message(PyTypeObject* type, PyObject* obj);  /* forward ref */
 
 /*
  *  Message type subclasses str
@@ -123,7 +125,7 @@ Message_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
     Py_DECREF(new_args);
     if (new_str == NULL) { return NULL; }
 
-    if (!is_message(new_str)) {
+    if (!is_message(type, new_str)) {
         PyErr_SetString(PyExc_TypeError,
                         "unicode.__new__ didn't return a Message");
         Py_DECREF(new_str);
@@ -132,7 +134,7 @@ Message_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
 
     new_msg = (Message*)new_str;
 
-    if (is_message(value)) {
+    if (is_message(type, value)) {
         /* value is a Message so we copy it and use it as base */
         other = (Message*)value;
         new_msg->domain = other->domain;
@@ -314,26 +316,7 @@ static PyType_Spec Message_type_spec = {
     .slots            = Message_type_slots
 };
 
-
-// TEMPORARY HACK!
-static PyTypeObject*  dynamic_message_type = NULL;
-
 #endif
-
-/*
- * Utility: returns True if 'obj' is an instance of 'MessageType'.
- */
-static int is_message(PyObject* obj)
-{
-#if USE_STATIC_TYPES
-    return PyObject_TypeCheck(obj, &MessageType);
-#else
-    if (dynamic_message_type == NULL) {
-        return 0;
-    }
-    return PyObject_TypeCheck(obj, dynamic_message_type);
-#endif
-}
 
 /*
  *  Module initialization structures
@@ -342,21 +325,73 @@ static int is_message(PyObject* obj)
 static char _zim__name__[]  = "_zope_i18nmessageid_message";
 static char _zim__doc__[]   = "I18n Messages";
 
+typedef struct {
+    PyTypeObject*  message_type;
+} _zim_module_state;
+
+/*
+ *  Macro to speed lookup of state members
+ */
+#define _zim_state(o) ((_zim_module_state*)PyModule_GetState(o))
+
+/*
+ * Utility: returns True if 'obj' is an instance of 'MessageType'.
+ */
+static int is_message(PyTypeObject* type, PyObject* obj)
+{
+#if USE_STATIC_TYPES
+    return PyObject_TypeCheck(obj, &MessageType);
+#else
+    _zim_module_state* rec = (_zim_module_state*)PyType_GetModuleState(type);
+    /* PT_GMS will already have set the exception */
+    if (rec == NULL) { return 0; }
+
+    return PyObject_TypeCheck(obj, rec->message_type);
+#endif
+}
+
+#if USE_MODULE_STATE
+
+static _zim_module_state*
+_zim_state_init(PyObject* module)
+{
+    _zim_module_state* rec = _zim_state(module);
+    rec->message_type = NULL;
+    return rec;
+}
+
+static int
+_zim_state_traverse(PyObject* module, visitproc visit, void* arg)
+{
+    _zim_module_state* rec = _zim_state(module);
+    Py_VISIT(rec->message_type);
+    return 0;
+}
+
+static int
+_zim_state_clear(PyObject* module)
+{
+    _zim_module_state* rec = _zim_state(module);
+    Py_CLEAR(rec->message_type);
+    return 0;
+}
+#endif
+
 static struct PyModuleDef moduledef = {
     PyModuleDef_HEAD_INIT,
-    .m_name=_zim__name__,
-    .m_doc=_zim__doc__,
+    .m_name     =_zim__name__,
+    .m_doc      =_zim__doc__,
+#if USE_MODULE_STATE
+    .m_size     = sizeof(_zim_module_state),
+    .m_traverse = _zim_state_traverse,
+    .m_clear    = _zim_state_clear,
+#endif
 };
 
 static PyObject*
 init(void)
 {
     PyObject* module;
-
-#if USE_HEAP_TYPES
-    PyObject* message_bases;  /* Python 3.9 insists on a tuple */
-    PyObject* message_type;
-#endif
 
     /* Create the module and add the functions */
     module = PyModule_Create(&moduledef);
@@ -373,18 +408,25 @@ init(void)
     if (PyType_Ready(&MessageType) < 0) {
         return NULL;
     }
+
     if (PyModule_AddObject(module, "Message", (PyObject*)&MessageType) < 0) {
         return NULL;
     }
 #else
+    PyObject* message_bases;  /* Python 3.9 insists on a tuple */
+    PyObject* message_type;
+    _zim_module_state* rec = _zim_state_init(module);
+
     message_bases = Py_BuildValue("(O)", (PyObject*)&PyUnicode_Type);
+    if (message_bases == NULL) { return NULL; }
+
     message_type = PyType_FromModuleAndSpec(
         module, &Message_type_spec, message_bases
     );
+    Py_DECREF(message_bases);
     if (message_type == NULL) { return NULL; }
 
-    // TEMPORARY HACK!!
-    dynamic_message_type = (PyTypeObject*)message_type;
+    rec->message_type = (PyTypeObject*)message_type;
 
     if (PyModule_AddObject(module, "Message", message_type) < 0) {
         return NULL;
