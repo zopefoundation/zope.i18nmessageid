@@ -15,12 +15,6 @@
 #include "Python.h"
 
 
-#if PY_MAJOR_VERSION >= 3
-  #define MOD_ERROR_VAL NULL
-#else
-  #define MOD_ERROR_VAL
-#endif
-
 typedef struct {
   PyUnicodeObject base;
   PyObject *domain;
@@ -48,11 +42,7 @@ Message_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
     return NULL;
 
   if (number != NULL && Py_None != number) {
-#if PY_MAJOR_VERSION >= 3
     if (!(PyLong_Check(number) || PyFloat_Check(number))) {
-#else
-    if (!(PyLong_Check(number) || PyInt_Check(number) || PyFloat_Check(number))) {
-#endif
       PyErr_SetString(PyExc_TypeError,
                       "`number` should be an integer or a float");
       return NULL;
@@ -283,8 +273,7 @@ static char _zope_i18nmessageid_message_module_name[] =
 static char _zope_i18nmessageid_message_module_documentation[] =
 "I18n Messages";
 
-#if PY_MAJOR_VERSION >= 3
-  static struct PyModuleDef moduledef = {
+static struct PyModuleDef moduledef = {
     PyModuleDef_HEAD_INIT,
     _zope_i18nmessageid_message_module_name,/* m_name */
     _zope_i18nmessageid_message_module_documentation,/* m_doc */
@@ -294,44 +283,36 @@ static char _zope_i18nmessageid_message_module_documentation[] =
     NULL,/* m_traverse */
     NULL,/* m_clear */
     NULL,/* m_free */
-  };
-#endif
+};
 
-#ifndef PyMODINIT_FUNC  /* declarations for DLL import/export */
-  #define PyMODINIT_FUNC void
-#endif
 
-PyMODINIT_FUNC
-#if PY_MAJOR_VERSION >= 3
- PyInit__zope_i18nmessageid_message(void)
-#else
- init_zope_i18nmessageid_message(void)
-#endif
+static PyObject*
+init(void)
 {
   PyObject *m;
   /* Initialize types: */
   MessageType.tp_base = &PyUnicode_Type;
-  if (PyType_Ready(&MessageType) < 0)
-    return MOD_ERROR_VAL;
+  if (PyType_Ready(&MessageType) < 0) {
+    return NULL;
+  }
 
   /* Create the module and add the functions */
-#if PY_MAJOR_VERSION >= 3
   m = PyModule_Create(&moduledef);
-#else
-  m = Py_InitModule3(_zope_i18nmessageid_message_module_name,
-                     _zope_i18nmessageid_message_methods,
-                     _zope_i18nmessageid_message_module_documentation);
-#endif
 
-  if (m == NULL)
-    return MOD_ERROR_VAL;
+  if (m == NULL) {
+    return NULL;
+  }
 
   /* Add types: */
-  if (PyModule_AddObject(m, "Message", (PyObject *)&MessageType) < 0)
-    return MOD_ERROR_VAL;
+  if (PyModule_AddObject(m, "Message", (PyObject *)&MessageType) < 0) {
+    return NULL;
+  }
 
-#if PY_MAJOR_VERSION >= 3
   return m;
-#endif
+}
 
+PyMODINIT_FUNC
+PyInit__zope_i18nmessageid_message(void)
+{
+    return init();
 }
