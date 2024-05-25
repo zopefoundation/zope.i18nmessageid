@@ -176,6 +176,15 @@ Message_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
     return (PyObject*)self;
 }
 
+/*
+ * Message type methods
+ */
+
+static char Message_reduce__doc__[] = (
+    "Reduce messages to a serializable form\n\n"
+    "Notably, for use in pickling."
+);
+
 static PyObject*
 Message_reduce(Message* self)
 {
@@ -217,8 +226,9 @@ Message_reduce(Message* self)
     return result;
 }
 
-/* Code to access structure members by accessing attributes */
-
+/*
+ *  Message type declaration structures
+ */
 
 static PyMemberDef Message_members[] = {
     { "domain", T_OBJECT, offsetof(Message, domain), READONLY },
@@ -232,9 +242,7 @@ static PyMemberDef Message_members[] = {
 
 static PyMethodDef Message_methods[] = {
     { "__reduce__",
-      (PyCFunction)Message_reduce,
-      METH_NOARGS,
-      "Reduce messages to a serializable form." },
+        (PyCFunction)Message_reduce, METH_NOARGS, Message_reduce__doc__ },
     { NULL } /* Sentinel */
 };
 
