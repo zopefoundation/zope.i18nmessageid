@@ -38,8 +38,9 @@ typedef struct
  */
 
 static int
-Message_traverse(Message* self, visitproc visit, void* arg)
+Message_traverse(PyObject* pyobj_self, visitproc visit, void* arg)
 {
+    Message* self = (Message*)pyobj_self;
     Py_VISIT(self->domain);
     Py_VISIT(self->default_);
     Py_VISIT(self->mapping);
@@ -50,8 +51,9 @@ Message_traverse(Message* self, visitproc visit, void* arg)
 }
 
 static int
-Message_clear(Message* self)
+Message_clear(PyObject* pyobj_self)
 {
+    Message* self = (Message*)pyobj_self;
     Py_CLEAR(self->domain);
     Py_CLEAR(self->default_);
     Py_CLEAR(self->mapping);
@@ -62,9 +64,9 @@ Message_clear(Message* self)
 }
 
 static void
-Message_dealloc(Message* self)
+Message_dealloc(PyObject* self)
 {
-    PyObject_GC_UnTrack((PyObject*)self);
+    PyObject_GC_UnTrack(self);
     Message_clear(self);
     PyUnicode_Type.tp_dealloc((PyObject*)self);
 }
