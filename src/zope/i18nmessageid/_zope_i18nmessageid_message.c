@@ -21,11 +21,9 @@
 #if PY_VERSION_HEX < 0x03090000
 #define USE_STATIC_TYPES 1
 #define USE_HEAP_TYPES 0
-#define USE_MODULE_STATE 0
 #else
 #define USE_STATIC_TYPES 0
 #define USE_HEAP_TYPES 1
-#define USE_MODULE_STATE 1
 #endif
 
 static int is_message(PyTypeObject* type, PyObject* obj);  /* forward ref */
@@ -350,8 +348,6 @@ static int is_message(PyTypeObject* type, PyObject* obj)
 #endif
 }
 
-#if USE_MODULE_STATE
-
 static _zim_module_state*
 _zim_state_init(PyObject* module)
 {
@@ -375,17 +371,14 @@ _zim_state_clear(PyObject* module)
     Py_CLEAR(rec->message_type);
     return 0;
 }
-#endif
 
 static struct PyModuleDef moduledef = {
     PyModuleDef_HEAD_INIT,
     .m_name     =_zim__name__,
     .m_doc      =_zim__doc__,
-#if USE_MODULE_STATE
     .m_size     = sizeof(_zim_module_state),
     .m_traverse = _zim_state_traverse,
     .m_clear    = _zim_state_clear,
-#endif
 };
 
 static PyObject*
@@ -399,10 +392,11 @@ init(void)
     if (module == NULL) {
         return NULL;
     }
-
     /* Initialize / add types: */
 
 #if USE_STATIC_TYPES
+    _zim_state_init(module); /* no dynamic types, but ensure NULL */
+
     MessageType.tp_base = &PyUnicode_Type;
 
     if (PyType_Ready(&MessageType) < 0) {
@@ -413,9 +407,9 @@ init(void)
         return NULL;
     }
 #else
+    _zim_module_state* rec = _zim_state_init(module);
     PyObject* message_bases;  /* Python 3.9 insists on a tuple */
     PyObject* message_type;
-    _zim_module_state* rec = _zim_state_init(module);
 
     message_bases = Py_BuildValue("(O)", (PyObject*)&PyUnicode_Type);
     if (message_bases == NULL) { return NULL; }
