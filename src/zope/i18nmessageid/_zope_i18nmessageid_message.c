@@ -374,26 +374,9 @@ _zim_state_clear(PyObject* module)
     return 0;
 }
 
-static struct PyModuleDef moduledef = {
-    PyModuleDef_HEAD_INIT,
-    .m_name     =_zim__name__,
-    .m_doc      =_zim__doc__,
-    .m_size     = sizeof(_zim_module_state),
-    .m_traverse = _zim_state_traverse,
-    .m_clear    = _zim_state_clear,
-};
-
-static PyObject*
-init(void)
+static int
+_zim_module_exec(PyObject* module)
 {
-    PyObject* module;
-
-    /* Create the module and add the functions */
-    module = PyModule_Create(&moduledef);
-
-    if (module == NULL) {
-        return NULL;
-    }
     /* Initialize / add types: */
 
 #if USE_STATIC_TYPES
@@ -402,11 +385,11 @@ init(void)
     MessageType.tp_base = &PyUnicode_Type;
 
     if (PyType_Ready(&MessageType) < 0) {
-        return NULL;
+        return -1;
     }
 
     if (PyModule_AddObject(module, "Message", (PyObject*)&MessageType) < 0) {
-        return NULL;
+        return -1;
     }
 #else
     _zim_module_state* rec = _zim_state_init(module);
@@ -414,22 +397,51 @@ init(void)
     PyObject* message_type;
 
     message_bases = Py_BuildValue("(O)", (PyObject*)&PyUnicode_Type);
-    if (message_bases == NULL) { return NULL; }
+    if (message_bases == NULL) { return -1; }
 
     message_type = PyType_FromModuleAndSpec(
         module, &Message_type_spec, message_bases
     );
     Py_DECREF(message_bases);
-    if (message_type == NULL) { return NULL; }
+    if (message_type == NULL) { return -1; }
 
     rec->message_type = (PyTypeObject*)message_type;
 
     if (PyModule_AddObject(module, "Message", message_type) < 0) {
-        return NULL;
+        return -1;
     }
 #endif
 
-    return module;
+    return 0;
+}
+
+/*
+ * Slot definitions for multi-phase initialization
+ *
+ * See: https://docs.python.org/3/c-api/module.html#multi-phase-initialization
+ * and: https://peps.python.org/pep-0489
+ */
+static PyModuleDef_Slot _zim_module_slots[] = {
+    {Py_mod_exec,       _zim_module_exec},
+    {0,                 NULL}
+};
+
+static struct PyModuleDef _zim_module = {
+    PyModuleDef_HEAD_INIT,
+    .m_name     =_zim__name__,
+    .m_doc      =_zim__doc__,
+    .m_size     = sizeof(_zim_module_state),
+    .m_traverse = _zim_state_traverse,
+    .m_clear    = _zim_state_clear,
+    .m_slots    = _zim_module_slots,
+};
+
+static PyObject*
+init(void)
+{
+    PyObject* module;
+
+    return PyModuleDef_Init(&_zim_module);
 }
 
 PyMODINIT_FUNC
