@@ -9,6 +9,15 @@
 
 - Add preliminary support for Python 3.13 as of 3.13a5.
 
+- Enable multi-phase module initialization (PEP 489) for all supported
+  Python versions.  See this "how-to" doc for rationale and steps:
+  https://docs.python.org/3.13/howto/isolating-extensions.html
+
+- Make the ``hookable`` extension type heap-allocated for Python >= 3.9.
+  Likewise, see the doc above for rationale and steps.  For Python < 3.9,
+  the ``hookable`` extension type continues to be allocated statically,
+  even though the module itself is allocated dynamically.
+
 
 6.1.0 (2023-10-05)
 ==================
