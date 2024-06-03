@@ -50,6 +50,10 @@ typedef struct
 static int
 Message_traverse(PyObject* pyobj_self, visitproc visit, void* arg)
 {
+#if USE_HEAP_TYPES
+    PyTypeObject* tp = Py_TYPE(pyobj_self);
+    Py_VISIT(tp);
+#endif
     Message* self = (Message*)pyobj_self;
     Py_VISIT(self->domain);
     Py_VISIT(self->default_);
@@ -63,6 +67,10 @@ Message_traverse(PyObject* pyobj_self, visitproc visit, void* arg)
 static int
 Message_clear(PyObject* pyobj_self)
 {
+#if USE_HEAP_TYPES
+    PyTypeObject* tp = Py_TYPE(pyobj_self);
+    Py_DECREF(tp);
+#endif
     Message* self = (Message*)pyobj_self;
     Py_CLEAR(self->domain);
     Py_CLEAR(self->default_);
