@@ -67,10 +67,6 @@ Message_traverse(PyObject* pyobj_self, visitproc visit, void* arg)
 static int
 Message_clear(PyObject* pyobj_self)
 {
-#if USE_HEAP_TYPES
-    PyTypeObject* tp = Py_TYPE(pyobj_self);
-    Py_DECREF(tp);
-#endif
     Message* self = (Message*)pyobj_self;
     Py_CLEAR(self->domain);
     Py_CLEAR(self->default_);
@@ -84,9 +80,15 @@ Message_clear(PyObject* pyobj_self)
 static void
 Message_dealloc(PyObject* self)
 {
+#if USE_HEAP_TYPES
+    PyTypeObject* tp = Py_TYPE(self);
+#endif
     PyObject_GC_UnTrack(self);
     Message_clear(self);
     PyUnicode_Type.tp_dealloc((PyObject*)self);
+#if USE_HEAP_TYPES
+    Py_DECREF(tp);
+#endif
 }
 
 static PyObject*
