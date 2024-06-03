@@ -18,7 +18,7 @@
 /*
  *  Don't use heap-allocated types for Python < 3.9.
  */
-#if PY_VERSION_HEX < 0x03090000
+#if PY_VERSION_HEX < 0x030a0000
 #define USE_STATIC_TYPES 1
 #define USE_HEAP_TYPES 0
 #else
@@ -310,6 +310,9 @@ static PyType_Spec Message_type_spec = {
     .basicsize        = sizeof(Message),
     .flags            = Py_TPFLAGS_DEFAULT |
                         Py_TPFLAGS_BASETYPE |
+#if PY_VERSION_HEX >= 0x030a0000
+                        Py_TPFLAGS_IMMUTABLETYPE |
+#endif
                         Py_TPFLAGS_HAVE_GC,
     .slots            = Message_type_slots
 };
@@ -441,8 +444,6 @@ static struct PyModuleDef _zim_module = {
 static PyObject*
 init(void)
 {
-    PyObject* module;
-
     return PyModuleDef_Init(&_zim_module);
 }
 

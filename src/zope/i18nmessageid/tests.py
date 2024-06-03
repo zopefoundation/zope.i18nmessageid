@@ -257,6 +257,12 @@ class MessageTests(PyMessageTests):
     def _getTargetClass(self):
         return messageid.Message
 
+    def test_base_type_is_immutable(self):
+        klass = self._getTargetClass()
+
+        with self.assertRaises(TypeError):
+            klass.foo = "Foo"
+
 
 @unittest.skipIf('java' in sys.platform or hasattr(sys, 'pypy_version_info'),
                  "We don't expect the C implementation here")
