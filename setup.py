@@ -132,11 +132,9 @@ setup(
     install_requires=['setuptools'],
     python_requires='>=3.8',
     include_package_data=True,
-    test_suite='zope.i18nmessageid.tests.test_suite',
     zip_safe=False,
     cmdclass={'build_ext': optional_build_ext},
     ext_modules=ext_modules,
-    tests_require=tests_require,
     extras_require={
         'testing': tests_require,
         'test': tests_require,
