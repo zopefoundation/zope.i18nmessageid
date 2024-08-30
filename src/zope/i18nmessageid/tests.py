@@ -220,8 +220,8 @@ class PyMessageTests(unittest.TestCase):
     def test___reduce___wo_values(self):
         message = self._makeOne('testing')
         klass, state = message.__reduce__()
-        self.assertTrue(klass is self._getTargetClass())
-        self.assertTrue(message.mapping is None)
+        self.assertIs(klass, self._getTargetClass())
+        self.assertIsNone(message.mapping)
         self.assertEqual(
             state,
             ('testing', None, None, None, None, None, None)
@@ -234,7 +234,7 @@ class PyMessageTests(unittest.TestCase):
             source, 'domain', 'default', mapping,
             msgid_plural='testings', default_plural="defaults", number=2)
         klass, state = message.__reduce__()
-        self.assertTrue(klass is self._getTargetClass())
+        self.assertIs(klass, self._getTargetClass())
         self.assertEqual(
             state,
             ('testing', 'domain', 'default', {'key': 'value'},
@@ -283,7 +283,7 @@ class MessageFactoryTests(unittest.TestCase):
     def test___call___defaults(self):
         factory = self._makeOne('domain')
         message = factory('testing')
-        self.assertTrue(isinstance(message, messageid.Message))
+        self.assertIsInstance(message, messageid.Message)
         self.assertEqual(message, 'testing')
         self.assertEqual(message.domain, 'domain')
         self.assertEqual(message.default, None)
@@ -298,7 +298,7 @@ class MessageFactoryTests(unittest.TestCase):
         message = factory(
             'testing', 'default', mapping,
             msgid_plural='testings', default_plural="defaults", number=2)
-        self.assertTrue(isinstance(message, messageid.Message))
+        self.assertIsInstance(message, messageid.Message)
         self.assertEqual(message, 'testing')
         self.assertEqual(message.domain, 'domain')
         self.assertEqual(message.default, 'default')

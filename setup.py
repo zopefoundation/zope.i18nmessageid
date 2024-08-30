@@ -68,6 +68,7 @@ class optional_build_ext(build_ext):
     """This class subclasses build_ext and allows
        the building of C extensions to fail.
     """
+
     def run(self):
         try:
             build_ext.run(self)
@@ -103,7 +104,7 @@ setup(
         read('README.rst')
         + '\n\n' +
         read('CHANGES.rst')
-        ),
+    ),
     keywords="zope i18n message factory",
     classifiers=[
         'Development Status :: 5 - Production/Stable',
