@@ -174,7 +174,10 @@ Message_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
     } else if (mapping != NULL) {
         /* Ensure that our mapping is immutable */
         new_msg->mapping = PyDictProxy_New(mapping);
-    } else {}
+    } else if (other != NULL && new_msg->mapping == other->mapping) {
+        /* borrowed? */
+        Py_XINCREF(new_msg->mapping);
+    }
 
     if (value_plural != NULL) {
         new_msg->value_plural = value_plural;
@@ -425,6 +428,8 @@ _zim_module_exec(PyObject* module)
     if (PyModule_AddObject(module, "Message", message_type) < 0) {
         return -1;
     }
+
+    Py_INCREF(message_type);  /* Recover stolen ref */
 #endif
 
     return 0;
