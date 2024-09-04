@@ -86,7 +86,8 @@ through attributes:
 
   >>> robot.default == '${name} is a robot.'
   True
-  >>> robot.mapping
+  >>> robot.mapping is None
+  True
   >>> robot.domain
   'futurama'
 
