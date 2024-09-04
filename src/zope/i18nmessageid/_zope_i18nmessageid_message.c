@@ -110,7 +110,7 @@ Message_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
     PyObject *new_args;
     PyObject *new_str;
     Message  *new_msg;
-    Message  *other;
+    Message  *other = NULL;
 
     if (!PyArg_ParseTupleAndKeywords(
         args, kwds, "O|OOOOOO", kwlist,
