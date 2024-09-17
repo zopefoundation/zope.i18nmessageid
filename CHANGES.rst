@@ -9,7 +9,7 @@
 
 - Build Windows wheels on GHA.
 
-- Add preliminary support for Python 3.13 as of 3.13a5.
+- Add support for Python 3.13.
 
 - Enable multi-phase module initialization (PEP 489) for all supported
   Python versions.  See this "how-to" doc for rationale and steps:
