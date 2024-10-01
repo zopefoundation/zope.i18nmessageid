@@ -22,15 +22,21 @@
 import os
 import platform
 import sys
-from distutils.command.build_ext import build_ext
-from distutils.errors import CCompilerError
-from distutils.errors import DistutilsExecError
-from distutils.errors import DistutilsPlatformError
 
 from setuptools import Extension
 from setuptools import find_packages
 from setuptools import setup
 
+
+# isort: off
+# See https://github.com/zopefoundation/zope.i18nmessageid/issues/61
+
+from distutils.command.build_ext import build_ext
+from distutils.errors import CCompilerError
+from distutils.errors import DistutilsExecError
+from distutils.errors import DistutilsPlatformError
+
+# isort: on
 
 py_impl = getattr(platform, 'python_implementation', lambda: None)
 is_pypy = py_impl() == 'PyPy'
