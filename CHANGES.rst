@@ -5,6 +5,8 @@
 7.1 (unreleased)
 ================
 
+- Fix imports in ``setup.py``.
+  (`#61 <https://github.com/zopefoundation/zope.i18nmessageid/issues/61>`_)
 
 7.0 (2024-09-17)
 ================
