@@ -107,7 +107,7 @@ pyMessage = Message
 
 try:
     from ._zope_i18nmessageid_message import Message
-except ImportError:  # pragma: no cover
+except ModuleNotFoundError:  # pragma: no cover
     pass
 
 
