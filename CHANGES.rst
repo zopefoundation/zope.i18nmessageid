@@ -5,6 +5,8 @@
 7.1 (unreleased)
 ================
 
+- Drop support for Python 3.10,3.10-pure, 3.11,3.11-pure, 3.12,3.12-pure, 3.13,3.13-pure, 3.8,3.8-pure, 3.9,3.9-pure.
+
 - Fix imports in ``setup.py``.
   (`#61 <https://github.com/zopefoundation/zope.i18nmessageid/issues/61>`_)
 
