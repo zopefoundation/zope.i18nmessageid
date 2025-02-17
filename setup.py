@@ -104,7 +104,7 @@ setup(
     name='zope.i18nmessageid',
     version='7.1.dev0',
     author='Zope Foundation and Contributors',
-    author_email='zope-dev@zope.org',
+    author_email='zope-dev@zope.dev',
     description='Message Identifiers for internationalization',
     long_description=(
         read('README.rst')
@@ -132,7 +132,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Framework :: Zope :: 3',
     ],
-    license='ZPL 2.1',
+    license='ZPL-2.1',
     url='https://github.com/zopefoundation/zope.i18nmessageid',
     packages=find_packages('src'),
     package_dir={'': 'src'},

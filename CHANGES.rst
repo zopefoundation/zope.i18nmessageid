@@ -5,6 +5,10 @@
 7.1 (unreleased)
 ================
 
+- Add preliminary support for Python 3.14 as of 3.14a4.
+
+- Drop support for Python 3.8.
+
 - Fix imports in ``setup.py``.
   (`#61 <https://github.com/zopefoundation/zope.i18nmessageid/issues/61>`_)
 
