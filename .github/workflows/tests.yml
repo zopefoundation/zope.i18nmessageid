@@ -212,8 +212,7 @@ jobs:
         if: matrix.python-version != '3.14'
         run: |
           # Install to collect dependencies into the (pip) cache.
-          pip install -U pip setuptools
-          pip install .[test]
+          pip install -U pip setuptools .[test]
 
       - name: Check zope.i18nmessageid build
         run: |
