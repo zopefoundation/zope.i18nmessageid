@@ -2,7 +2,7 @@
  Changes
 =========
 
-7.1 (unreleased)
+8.0 (unreleased)
 ================
 
 - Add preliminary support for Python 3.14 as of 3.14a4.
