@@ -24,7 +24,6 @@ import platform
 import sys
 
 from setuptools import Extension
-from setuptools import find_packages
 from setuptools import setup
 
 
@@ -60,7 +59,7 @@ if not is_pypy and not is_jython:
 
 
 tests_require = [
-    'zope.testrunner',
+    'zope.testrunner >= 6.4',
     'coverage',
 ]
 
@@ -133,9 +132,10 @@ setup(
     ],
     license='ZPL-2.1',
     url='https://github.com/zopefoundation/zope.i18nmessageid',
-    packages=find_packages('src'),
+    # we need the following two parameters because we compile C code,
+    # otherwise only the shared library is installed:
     package_dir={'': 'src'},
-    namespace_packages=['zope'],
+    packages=['zope.i18nmessageid'],
     install_requires=['setuptools'],
     python_requires='>=3.9',
     include_package_data=True,
