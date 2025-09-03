@@ -5,6 +5,8 @@
 8.0 (unreleased)
 ================
 
+- Replace ``pkg_resources`` namespace with PEP 420 native namespace.
+
 - Add preliminary support for Python 3.14 as of 3.14a4.
 
 - Drop support for Python 3.8.
