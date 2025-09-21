@@ -136,7 +136,6 @@ setup(
     # otherwise only the shared library is installed:
     package_dir={'': 'src'},
     packages=['zope.i18nmessageid'],
-    install_requires=['setuptools'],
     python_requires='>=3.9',
     include_package_data=True,
     zip_safe=False,
