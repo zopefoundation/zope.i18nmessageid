@@ -15,17 +15,6 @@
 #include "Python.h"
 #include "structmember.h"
 
-/*
- *  Don't use heap-allocated types for Python < 3.9.
- */
-#if PY_VERSION_HEX < 0x030a0000
-#define USE_STATIC_TYPES 1
-#define USE_HEAP_TYPES 0
-#else
-#define USE_STATIC_TYPES 0
-#define USE_HEAP_TYPES 1
-#endif
-
 static int is_message(PyTypeObject* type, PyObject* obj);  /* forward ref */
 
 /*
@@ -50,10 +39,8 @@ typedef struct
 static int
 Message_traverse(PyObject* pyobj_self, visitproc visit, void* arg)
 {
-#if USE_HEAP_TYPES
     PyTypeObject* tp = Py_TYPE(pyobj_self);
     Py_VISIT(tp);
-#endif
     Message* self = (Message*)pyobj_self;
     Py_VISIT(self->domain);
     Py_VISIT(self->default_);
@@ -80,15 +67,11 @@ Message_clear(PyObject* pyobj_self)
 static void
 Message_dealloc(PyObject* self)
 {
-#if USE_HEAP_TYPES
     PyTypeObject* tp = Py_TYPE(self);
-#endif
     PyObject_GC_UnTrack(self);
     Message_clear(self);
     PyUnicode_Type.tp_dealloc((PyObject*)self);
-#if USE_HEAP_TYPES
     Py_DECREF(tp);
-#endif
 }
 
 static PyObject*
@@ -281,29 +264,6 @@ static char Message__doc__[] =
   "no translation domain.  default may also be None, in which case the\n"
   "message id itself implicitly serves as the default text.\n";
 
-#if USE_STATIC_TYPES
-/*
- *  Static type: MessageType
- */
-
-static PyTypeObject MessageType = {
-    PyVarObject_HEAD_INIT(NULL, 0)
-    .tp_name          = Message__name__,
-    .tp_doc           = Message__doc__,
-    .tp_basicsize     = sizeof(Message),
-    .tp_flags         = Py_TPFLAGS_DEFAULT |
-                        Py_TPFLAGS_BASETYPE |
-                        Py_TPFLAGS_HAVE_GC,
-    .tp_new           = Message_new,
-    .tp_traverse      = Message_traverse,
-    .tp_clear         = Message_clear,
-    .tp_dealloc       = Message_dealloc,
-    .tp_methods       = Message_methods,
-    .tp_members       = Message_members,
-};
-
-#else
-
 /*
  *  Heap type: MessageType
  */
@@ -330,7 +290,6 @@ static PyType_Spec Message_type_spec = {
     .slots            = Message_type_slots
 };
 
-#endif
 
 /*
  *  Module initialization structures
@@ -354,15 +313,11 @@ typedef struct {
 static int is_message(PyTypeObject* type, PyObject* obj)
 {
     PyTypeObject* message_type;
-#if USE_STATIC_TYPES
-    message_type = &MessageType;
-#else
     _zim_module_state* rec = (_zim_module_state*)PyType_GetModuleState(type);
     /* PT_GMS will already have set the exception */
     if (rec == NULL) { return 0; }
 
     message_type = rec->message_type;
-#endif
     return PyObject_TypeCheck(obj, message_type);
 }
 
@@ -397,21 +352,7 @@ _zim_module_exec(PyObject* module)
 
     /* Initialize / add types: */
 
-#if USE_STATIC_TYPES
-
-    MessageType.tp_base = &PyUnicode_Type;
-
-    if (PyType_Ready(&MessageType) < 0) {
-        return -1;
-    }
-    Py_INCREF(&MessageType);
-    rec->message_type = &MessageType;
-
-    if (PyModule_AddObject(module, "Message", (PyObject*)&MessageType) < 0) {
-        return -1;
-    }
-#else
-    PyObject* message_bases;  /* Python 3.9 insists on a tuple */
+    PyObject* message_bases;
     PyObject* message_type;
 
     message_bases = Py_BuildValue("(O)", (PyObject*)&PyUnicode_Type);
@@ -430,7 +371,6 @@ _zim_module_exec(PyObject* module)
     }
 
     Py_INCREF(message_type);  /* Recover stolen ref */
-#endif
 
     return 0;
 }
