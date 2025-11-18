@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zope.i18nmessageid"
-version = "8.2.dev0"
+version = "8.2"
 description = "Message Identifiers for internationalization"
 keywords = ["zope", "i18n", "message", "factory"]
 readme = "README.rst"
