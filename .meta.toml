@@ -1,8 +1,8 @@
-# Generated from:
-# https://github.com/zopefoundation/meta/tree/master/config/c-code
+# Generated with zope.meta (https://zopemeta.readthedocs.io/) from:
+# https://github.com/zopefoundation/meta/tree/master/src/zope/meta/c-code
 [meta]
 template = "c-code"
-commit-id = "d4b7f3ba"
+commit-id = "21b3fb2e"
 
 [python]
 with-windows = true
@@ -11,6 +11,7 @@ with-future-python = true
 with-docs = true
 with-sphinx-doctests = true
 with-macos = false
+with-free-threaded-python = false
 
 [coverage]
 fail-under = 95
