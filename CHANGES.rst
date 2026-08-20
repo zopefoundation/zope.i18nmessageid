@@ -4,6 +4,8 @@ Change log
 8.3 (unreleased)
 ----------------
 
+- Add support for Python 3.15.
+
 - Add support for automatically building and publishing Windows/ARM64 wheels.
 
 - Add support for automatically building and publishing source distributions.
