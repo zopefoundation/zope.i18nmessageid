@@ -7,7 +7,7 @@
 
 .. image:: https://github.com/zopefoundation/zope.i18nmessageid/actions/workflows/tests.yml/badge.svg
         :target: https://github.com/zopefoundation/zope.i18nmessageid/actions/workflows/tests.yml
-        
+
 .. image:: https://readthedocs.org/projects/zopei18nmessageid/badge/?version=latest
         :target: http://zopei18nmessageid.readthedocs.org/en/latest/
         :alt: Documentation Status
