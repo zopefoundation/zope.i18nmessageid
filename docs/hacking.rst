@@ -160,7 +160,7 @@ tool designed to run tests against multiple Python versions.  It creates
 a virtual environment for each configured version, installs the current
 package and configured dependencies into each environment, and then runs the
 configured commands.
-   
+
 :mod:`zope.i18nmessageid` configures the following :mod:`tox` environments via
 its ``tox.ini`` file:
 
