@@ -2,7 +2,7 @@
 # https://github.com/zopefoundation/meta/tree/master/src/zope/meta/c-code
 [meta]
 template = "c-code"
-commit-id = "a8e6b26e"
+commit-id = "bca65de7"
 
 [python]
 with-windows = true
@@ -28,4 +28,9 @@ additional-rules = [
     "include *.yaml",
     "include *.sh",
     "recursive-include docs *.bat",
+    ]
+
+[check-manifest]
+additional-ignores = [
+    "docs/_build/html/_static/scripts/*",
     ]
