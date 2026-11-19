@@ -29,3 +29,8 @@ additional-rules = [
     "include *.sh",
     "recursive-include docs *.bat",
     ]
+
+[check-manifest]
+additional-ignores = [
+    "docs/_build/html/_static/scripts/*",
+    ]
